@@ -5,15 +5,15 @@
   "author": "Maikon",
   "private": true,
   "main": "electron/main.cjs",
-  "portaDoPrograma": 7774,
+  "portaDoPrograma": 8172,
   "devDependencies": {
     "electron": "33.2.1",
     "electron-builder": "25.1.8"
   },
   "build": {
-    "appId": "com.maikonadvogadomgalt.teste.app.pc",
-    "productName": "testes",
-    "executableName": "testes",
+    "appId": "com.maikonadvogadomgalt.teste.app.pc.ntestes",
+    "productName": "testes (testes)",
+    "executableName": "testes-ntestes",
     "directories": {
       "output": "release"
     },
@@ -40,11 +40,11 @@
       "perMachine": false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "testes",
-      "artifactName": "testes-Instalar.exe"
+      "shortcutName": "testes (testes)",
+      "artifactName": "testes-ntestes-Instalar.exe"
     },
     "portable": {
-      "artifactName": "testes-sem-instalar.exe"
+      "artifactName": "testes-ntestes-sem-instalar.exe"
     }
   }
 }

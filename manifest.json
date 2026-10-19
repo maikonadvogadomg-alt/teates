@@ -1,7 +1,7 @@
 {
-  "id": "./app-teste",
-  "name": "teste",
-  "short_name": "Teste",
+  "id": "./app-testes",
+  "name": "testes",
+  "short_name": "testes",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

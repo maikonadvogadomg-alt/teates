@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SK Oficina Jurídica v4 - Maikon Caldeira</title>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkBg: '#0d1208',
+            panelBg: '#141c0d',
+            borderGreen: '#223018',
+            textGreen: '#c8dda8',
+            brandGreen: '#5fad3c',
+            focusGreen: '#7dcf55',
+            matrixGreen: '#22c55e',
+            accentGold: '#d4aa4e',
+            accentBlue: '#56b6c2'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0d1208; }
+    ::-webkit-scrollbar-thumb { background: #223018; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #5fad3c; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; }
+  </style>
+</head>
+<body class="bg-darkBg text-textGreen font-sans min-h-screen flex flex-col">
+
+  <!-- Header Unificado -->
+  <header class="bg-panelBg border-b border-borderGreen p-4 flex flex-col md:flex-row justify-between items-center gap-4 shrink-0">
+    <div class="flex items-center gap-3">
+      <span class="text-2xl">⚖️</span>
+      <div>
+        <h1 class="text-brandGreen font-bold text-lg flex items-center gap-2">
+          SK Oficina Jurídica Unificada <span class="text-xs bg-brandGreen/20 text-brandGreen px-2 py-0.5 rounded">v4</span>
+        </h1>
+        <p class="text-[11px] text-focusGreen font-mono">Maikon Caldeira OAB/MG 183712 — Extrator + Scanner + Combiner</p>
+      </div>
+    </div>
+    
+    <!-- Menu de Abas -->
+    <div class="flex flex-wrap gap-1">
+      <button onclick="showSection('importar')" class="tab-btn bg-borderGreen text-brandGreen px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-focusGreen hover:text-darkBg transition-all">📥 Importar ZIP/APK</button>
+      <button onclick="showSection('extrator')" class="tab-btn bg-borderGreen text-brandGreen px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-focusGreen hover:text-darkBg transition-all">🔎 Extrator Web</button>
+      <button onclick="showSection('editor')" class="tab-btn bg-borderGreen text-brandGreen px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-focusGreen hover:text-darkBg transition-all">📂 Editor</button>
+      <button onclick="showSection('scanner')" class="tab-btn bg-borderGreen text-brandGreen px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-focusGreen hover:text-darkBg transition-all">🛡️ Scanner</button>
+      <button onclick="showSection('combinar')" class="tab-btn bg-borderGreen text-brandGreen px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-focusGreen hover:text-darkBg transition-all">🔗 Combinar Apps</button>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="flex-1 overflow-hidden relative flex flex-col">
+
+    <!-- ABA 1: IMPORTAR LOCAL -->
+    <section id="section-importar" class="section-panel p-6 space-y-6 overflow-y-auto max-w-4xl mx-auto w-full">
+      <div class="bg-panelBg border border-borderGreen rounded-xl p-6 text-center space-y-4">
+        <div class="text-4xl">📦</div>
+        <h2 class="text-white font-bold text-lg">Carregar Projeto Local (ZIP ou APK)</h2>
+        <p class="text-xs text-textGreen">Arraste ou selecione o arquivo para extrair e analisar o código-fonte.</p>
+        
+        <div class="border-2 border-dashed border-borderGreen p-8 rounded-lg bg-darkBg/50 hover:border-brandGreen cursor-pointer transition-all" onclick="document.getElementById('zipInput').click()">
+          <p class="text-xs text-brandGreen font-bold">Clique para procurar arquivo local (.zip, .apk, .aab)</p>
+          <span id="zipName" class="block text-[10px] mt-2 text-textGreen">Nenhum arquivo carregado</span>
+        </div>
+        <input type="file" id="zipInput" accept=".zip,.apk,.aab" class="hidden">
+      </div>
+
+      <div class="bg-panelBg border border-borderGreen rounded-xl p-6 space-y-4">
+        <h3 class="text-white font-bold text-sm flex items-center gap-2">🌐 Baixar Repositório do GitHub</h3>
+        <div class="space-y-2">
+          <input type="text" id="githubUrl" placeholder="https://github.com/usuario/repositorio" class="w-full bg-darkBg border border-borderGreen rounded-lg px-3 py-2 text-xs text-white placeholder-gray-600 outline-none">
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="githubBranch" placeholder="branch (padrão: main)" class="bg-darkBg border border-borderGreen rounded-lg px-3 py-2 text-xs text-white placeholder-gray-600 outline-none">
+            <input type="password" id="githubToken" placeholder="Token GitHub (opcional)" class="bg-darkBg border border-borderGreen rounded-lg px-3 py-2 text-xs text-white placeholder-gray-600 outline-none">
+          </div>
+          <button onclick="loadFromGitHub()" class="w-full bg-brandGreen text-darkBg py-2 rounded-lg text-xs font-bold hover:bg-focusGreen transition-all">Baixar e Processar Repositório</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 2: EXTRATOR WEB JURÍDICO -->
+    <section id="section-extrator" class="section-panel hidden p-6 overflow-y-auto max-w-5xl mx-auto w-full space-y-6">
+      <div class="bg-panelBg border border-borderGreen rounded-xl p-6 space-y-4">
+        <h2 class="text-brandGreen font-bold text-lg">🔎 Extrator de Sites e Cálculos Jurídicos</h2>
+        <p class="text-xs text-textGreen">Varre sites de tribunais, extrai textos de processos, scripts de cálculo e APIs.</p>
+
+        <div class="flex gap-2 flex-wrap">
+          <input type="text" id="extractorUrl" placeholder="https://www.tjmg.jus.br" class="flex-1 bg-darkBg border border-borderGreen rounded-lg px-3 py-2 text-xs text-white outline-none">
+          <select id="extractorDepth" class="bg-darkBg border border-borderGreen rounded-lg px-3 py-2 text-xs text-textGreen outline-none">
+            <option value="1">Apenas página principal</option>
+            <option value="2">Página + Subpáginas</option>
+          </select>
+          <button onclick="runWebExtractor()" class="bg-brandGreen text-darkBg px-4 py-2 rounded-lg text-xs font-bold hover:bg-focusGreen transition-all">Extrair Site</button>
+        </div>
+
+        <!-- Atalhos Rápidos -->
+        <div class="flex flex-wrap gap-1.5 pt-2">
+          <button onclick="setExtractorUrl('https://www.tjmg.jus.br')" class="text-[10px] bg-darkBg border border-borderGreen px-2.5 py-1 rounded hover:border-brandGreen">TJMG</button>
+          <button onclick="setExtractorUrl('https://www.stj.jus.br')" class="text-[10px] bg-darkBg border border-borderGreen px-2.5 py-1 rounded hover:border-brandGreen">STJ</button>
+          <button onclick="setExtractorUrl('https://www.stf.jus.br')" class="text-[10px] bg-darkBg border border-borderGreen px-2.5 py-1 rounded hover:border-brandGreen">STF</button>
+          <button onclick="setExtractorUrl('https://www.calculojuridico.com.br')" class="text-[10px] bg-darkBg border border-borderGreen px-2.5 py-1 rounded hover:border-brandGreen">Cálculo Jurídico</button>
+        </div>
+
+        <!-- Resultados da Extração -->
+        <div id="extractorResults" class="hidden space-y-4 pt-4 border-t border-borderGreen">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div class="bg-darkBg p-3 rounded-lg border border-borderGreen text-center">
+              <span id="extPagesCount" class="block text-xl font-mono text-brandGreen">0</span>
+              <span class="text-[10px] text-textGreen">Páginas Varridas</span>
+            </div>
+            <div class="bg-darkBg p-3 rounded-lg border border-borderGreen text-center">
+              <span id="extScriptsCount" class="block text-xl font-mono text-accentGold">0</span>
+              <span class="text-[10px] text-textGreen">Scripts de Cálculo</span>
+            </div>
+            <div class="bg-darkBg p-3 rounded-lg border border-borderGreen text-center">
+              <span id="extLinksCount" class="block text-xl font-mono text-accentBlue">0</span>
+              <span class="text-[10px] text-textGreen">Links Encontrados</span>
+            </div>
+            <div class="bg-darkBg p-3 rounded-lg border border-borderGreen text-center">
+              <span id="extApisCount" class="block text-xl font-mono text-purple-400">0</span>
+              <span class="text-[10px] text-textGreen">APIs Detectadas</span>
+            </div>
+          </div>
+
+          <!-- Abas internas do Extrator -->
+          <div class="border-b border-borderGreen flex gap-2">
+            <button onclick="showExtSubTab('overview')" class="ext-subtab text-xs py-1 px-3 border-b-2 border-brandGreen text-white">Visão Geral</button>
+            <button onclick="showExtSubTab('scripts')" class="ext-subtab text-xs py-1 px-3 text-textGreen">Scripts & Cálculos</button>
+            <button onclick="showExtSubTab('text')" class="ext-subtab text-xs py-1 px-3 text-textGreen">Texto Extraído</button>
+          </div>
+
+          <div id="ext-subtab-overview" class="ext-panel space-y-2"></div>
+          <div id="ext-subtab-scripts" class="ext-panel space-y-2 hidden"></div>
+          <div id="ext-subtab-text" class="ext-panel space-y-2 hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 3: EDITOR DE CÓDIGO -->
+    <section id="section-editor" class="section-panel hidden flex-1 flex flex-col md:flex-row overflow-hidden h-full">
+      <!-- Lista de arquivos lateral -->
+      <div class="w-full md:w-80 bg-panelBg border-r border-borderGreen p-3 flex flex-col shrink-0">
+        <h3 class="text-xs font-bold text-brandGreen uppercase mb-2 flex justify-between">
+          <span>📁 Arquivos do Projeto</span>
+          <span id="filesCount" class="text-matrixGreen">0</span>
+        </h3>
+        <input type="text" id="fileSearch" placeholder="Buscar arquivo..." onkeyup="filterFiles()" class="bg-darkBg border border-borderGreen rounded-lg px-3 py-1.5 text-xs text-white outline-none mb-2">
+        <div id="fileList" class="flex-1 overflow-y-auto space-y-1 text-xs">
+          <p class="text-gray-500 italic p-2 text-center">Nenhum arquivo carregado.</p>
+        </div>
+      </div>
+
+      <!-- Editor de código -->
+      <div class="flex-1 bg-darkBg p-3 flex flex-col overflow-hidden">
+        <div class="flex justify-between items-center mb-2 bg-panelBg p-2 rounded-lg border border-borderGreen">
+          <span id="currentFileName" class="text-xs font-mono text-brandGreen font-bold">📝 Nenhum arquivo selecionado</span>
+          <div class="flex gap-2">
+            <button onclick="saveCurrentFileChanges()" class="text-[10px] bg-brandGreen/20 text-brandGreen border border-brandGreen/30 px-2.5 py-1 rounded hover:bg-brandGreen hover:text-black transition-all">Salvar Alteração</button>
+            <button onclick="downloadModifiedZip()" class="text-[10px] bg-accentBlue/20 text-accentBlue border border-accentBlue/30 px-2.5 py-1 rounded hover:bg-accentBlue hover:text-black transition-all">Exportar ZIP</button>
+          </div>
+        </div>
+        <textarea id="fileContent" class="flex-1 w-full bg-[#020617] border border-borderGreen rounded-lg p-4 text-xs font-mono text-matrixGreen outline-none resize-none" placeholder="// Selecione um arquivo para editar..."></textarea>
+      </div>
+    </section>
+
+    <!-- ABA 4: SCANNER DE DEPENDÊNCIAS -->
+    <section id="section-scanner" class="section-panel hidden p-6 overflow-y-auto max-w-5xl mx-auto w-full space-y-6">
+      <div class="bg-panelBg border border-borderGreen rounded-xl p-6 space-y-4">
+        <h2 class="text-brandGreen font-bold text-lg">🛡️ Scanner de Dependências & Limpeza</h2>
+        <p class="text-xs text-textGreen">Identifique sujeiras do Replit, erros de nó ou termos personalizados em todo o projeto.</p>
+
+        <div class="bg-darkBg/50 p-4 rounded-lg border border-borderGreen space-y-2">
+          <label class="block text-xs font-bold text-brandGreen">🔍 Termo de Busca Personalizado (Opcional)</label>
+          <div class="flex gap-2">
+            <input type="text" id="customSearchTerm" placeholder="Ex: localhost, neon, api_key, banco" class="flex-1 bg-darkBg border border-borderGreen rounded-lg px-3 py-1.5 text-xs text-white outline-none">
+            <button onclick="runScan()" class="bg-brandGreen text-darkBg px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-focusGreen transition-all">Escanear Projeto</button>
+          </div>
+        </div>
+
+        <div id="scannerActions" class="hidden flex gap-2">
+          <button onclick="downloadScanReport()" class="bg-borderGreen text-brandGreen border border-brandGreen/30 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-brandGreen hover:text-black transition-all">📥 Baixar Relatório .TXT</button>
+          <button onclick="autoCleanReplitFiles()" class="bg-red-950/40 text-red-400 border border-red-900/50 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-red-500 hover:text-white transition-all">🧹 Limpar Replit e Baixar ZIP</button>
+        </div>
+
+        <div id="scannerResults" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- ABA 5: COMBINAR APLICATIVOS (Sua ferramenta recuperada!) -->
+    <section id="section-combinar" class="section-panel hidden p-6 overflow-y-auto max-w-4xl mx-auto w-full space-y-6">
+      <div class="bg-panelBg border border-borderGreen rounded-xl p-6 space-y-4">
+        <div class="flex justify-between items-center border-b border-borderGreen pb-3">
+          <div>
+            <h2 class="text-brandGreen font-bold text-lg">🔗 Combinar Projetos & Códigos</h2>
+            <p class="text-xs text-textGreen">Monte a estrutura ideal e gere o prompt perfeito para a IA unificar seus códigos.</p>
+          </div>
+          <button onclick="clearCombiner()" class="text-xs border border-borderGreen text-textGreen px-2.5 py-1 rounded hover:text-brandGreen transition-all">Limpar Tudo</button>
+        </div>
+
+        <div>
+          <label class="block text-brandGreen text-xs font-semibold mb-1">🎯 Objetivo do Aplicativo Final</label>
+          <textarea id="combinerGoal" rows="2" placeholder="Ex: Unificar meu PWA Jurídico com a função de gerar relatórios em PDF..." class="w-full bg-darkBg border border-borderGreen rounded-lg px-3 py-2 text-xs text-textGreen placeholder-gray-600 outline-none resize-none"></textarea>
+        </div>
+
+        <div id="appsContainer" class="space-y-4"></div>
+
+        <div class="flex gap-2">
+          <button onclick="addAppCard()" class="flex-1 py-2 border border-dashed border-borderGreen rounded-lg text-brandGreen text-xs font-bold hover:bg-borderGreen/20 transition-all">➕ Adicionar Outro Código</button>
+          <button onclick="generateSuperPrompt()" class="flex-1 py-2 bg-borderGreen text-brandGreen font-bold text-xs rounded-lg hover:bg-brandGreen hover:text-black transition-all">✨ Gerar Prompt de Unificação</button>
+        </div>
+
+        <!-- Prompt Gerado -->
+        <div id="promptResultContainer" class="hidden bg-darkBg border border-borderGreen rounded-xl overflow-hidden mt-4">
+          <div class="flex items-center justify-between px-3 py-2 bg-borderGreen/30 border-b border-borderGreen">
+            <span class="text-brandGreen text-xs font-bold">📋 Prompt Pronto para Copiar</span>
+            <button onclick="copyGeneratedPrompt()" class="text-xs bg-borderGreen text-brandGreen px-3 py-1 rounded hover:bg-brandGreen hover:text-black transition-all">Copiar Prompt</button>
+          </div>
+          <textarea id="generatedPromptTextarea" rows="8" class="w-full bg-darkBg p-3 text-xs text-textGreen font-mono leading-relaxed outline-none resize-none" readonly></textarea>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Loader Global -->
+  <div id="globalLoader" class="hidden fixed inset-0 bg-black/80 z-50 flex flex-col items-center justify-center space-y-4">
+    <div class="w-12 h-12 border-4 border-brandGreen border-t-transparent rounded-full spinner"></div>
+    <p id="loaderMsg" class="text-brandGreen font-mono text-xs">Processando...</p>
+  </div>
+
+  <script>
+    // ==================== ESTADO GLOBAL ====================
+    let currentFiles = [];
+    let fileContents = {};
+    let appsToCombine = [];
+    let activeFile = null;
+    let extractedData = null;
+
+    // Padrões de busca do Replit
+    const _p = String.fromCharCode(114,101,112,108,105,116);
+    const PATS = [
+      { re: new RegExp(_p + "\\.com",    "gi"), lb: "url-plataforma" },
+      { re: new RegExp("repl\\.it",      "gi"), lb: "url-plataforma-antiga" },
+      { re: new RegExp(_p.toUpperCase() + "_", "g"),  lb: "var-plataforma" },
+      { re: new RegExp("REPL_ID",        "g"),  lb: "var-id-plataforma" },
+      { re: new RegExp("REPL_SLUG",      "g"),  lb: "var-slug-plataforma" },
+      { re: new RegExp("REPL_OWNER",     "g"),  lb: "var-owner-plataforma" },
+      { re: new RegExp("@" + _p + "/",   "gi"), lb: "pacote-externo" },
+      { re: /vite-plugin-runtime-error-modal/gi,  lb: "plugin-error-externo" },
+      { re: /vite-plugin-cartographer/gi,         lb: "plugin-cartographer-externo" },
+      { re: /vite-plugin-dev-banner/gi,           lb: "plugin-banner-externo" },
+      { re: new RegExp("\\." + _p + "\\b", "gi"), lb: "config-plataforma" },
+      { re: new RegExp(_p + "\\.app",    "gi"), lb: "dominio-hospedagem" },
+      { re: new RegExp(_p + "-dev\\.com","gi"), lb: "dominio-dev-externo" },
+      { re: new RegExp("pid1\\." + _p,   "gi"), lb: "processo-plataforma" },
+    ];
+
+    const SKIP_EXT = new Set(["png","jpg","jpeg","gif","webp","ico","woff","woff2","ttf","eot","otf","mp3","mp4","webm","ogg","bin","class","dex"]);
+
+    const PROXIES = [
+      { name:"allorigins.win", fn:u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}` },
+      { name:"corsproxy.io",   fn:u=>`https://corsproxy.io/?${encodeURIComponent(u)}` },
+      { name:"codetabs.com",   fn:u=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}` },
+    ];
+
+    // ==================== ABAS ====================
+    function showSection(id) {
+      document.querySelectorAll('.section-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById(`section-${id}`).classList.remove('hidden');
+    }
+
+    function showLoader(msg) {
+      document.getElementById('loaderMsg').innerText = msg;
+      document.getElementById('globalLoader').classList.remove('hidden');
+    }
+    function hideLoader() {
+      document.getElementById('globalLoader').classList.add('hidden');
+    }
+
+    // ==================== IMPORTAÇÃO ZIP/APK ====================
+    document.getElementById('zipInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('zipName').innerText = file.name;
+      showLoader("Processando arquivo local...");
+
+      try {
+        const ext = file.name.split('.').pop().toLowerCase();
+        if (['zip', 'apk', 'aab', 'jar', 'aar'].includes(ext)) {
+          const buffer = await file.arrayBuffer();
+          const zip = await JSZip.loadAsync(buffer);
+          await processZip(zip);
+        } else {
+          const text = await file.text();
+          currentFiles = [file.name];
+          fileContents[file.name] = text;
+          renderFileList();
+          showSection('editor');
+        }
+      } catch(e) {
+        alert("Erro ao ler arquivo: " + e.message);
+      } finally {
+        hideLoader();
+      }
+    });
+
+    async function processZip(zip) {
+      currentFiles = [];
+      fileContents = {};
+
+      zip.forEach((path, entry) => {
+        if (!entry.dir) currentFiles.push(path);
+      });
+
+      currentFiles.sort();
+      showLoader(`Carregando ${currentFiles.length} arquivos...`);
+
+      let promises = currentFiles.map(async (path) => {
+        const ext = path.split('.').pop().toLowerCase();
+        if (SKIP_EXT.has(ext)) {
+          fileContents[path] = "[Arquivo binário/mídia]";
+          return;
+        }
+        try {
+          fileContents[path] = await zip.file(path).async('string');
+        } catch(e) {
+          fileContents[path] = "[Erro ao ler arquivo]";
+        }
+      });
+
+      await Promise.all(promises);
+      renderFileList();
+      showSection('editor');
+    }
+
+    // ==================== GITHUB ====================
+    async function loadFromGitHub() {
+      let url = document.getElementById('githubUrl').value.trim();
+      let branch = document.getElementById('githubBranch').value.trim() || 'main';
+      let token = document.getElementById('githubToken').value.trim();
+
+      if (!url) return alert("Por favor, indique a URL do repositório.");
+      const m = url.match(/github\.com\/([^/]+)\/([^/]+)/);
+      if (!m) return alert("URL inválida.");
+      const [, owner, repo] = m;
+
+      showLoader("Baixando do GitHub...");
+      const zipUrl = `https://codeload.github.com/${owner}/${repo}/zip/refs/heads/${branch}`;
+      const hdrs = token ? { Authorization: `token ${token}` } : {};
+
+      try {
+        let resp = await fetch(zipUrl, { headers: hdrs });
+        if (!resp.ok) {
+          showLoader("Tentando via proxy secundário...");
+          const px = `https://api.allorigins.win/raw?url=${encodeURIComponent(zipUrl)}`;
+          resp = await fetch(px);
+        }
+        if (!resp.ok) throw new Error("Falha ao baixar repositório.");
+
+        const blob = await resp.blob();
+        const buffer = await blob.arrayBuffer();
+        const zip = await JSZip.loadAsync(buffer);
+
+        const tempFiles = Object.keys(zip.files).filter(n => !zip.files[n].dir);
+        const prefix = (tempFiles[0]?.split("/")[0] ?? "") + "/";
+
+        currentFiles = [];
+        fileContents = {};
+
+        for (const n of tempFiles) {
+          const rel = n.startsWith(prefix) ? n.slice(prefix.length) : n;
+          if (!rel) continue;
+          currentFiles.push(rel);
+          fileContents[rel] = await zip.files[n].async("string");
+        }
+
+        currentFiles.sort();
+        renderFileList();
+        showSection('editor');
+        alert("Repositório importado!");
+      } catch(e) {
+        alert("Erro: " + e.message);
+      } finally {
+        hideLoader();
+      }
+    }
+
+    // ==================== EDITOR DE CÓDIGO ====================
+    function renderFileList() {
+      const container = document.getElementById('fileList');
+      document.getElementById('filesCount').innerText = currentFiles.length;
+      
+      if (currentFiles.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 italic p-2 text-center">Nenhum arquivo.</p>';
+        return;
+      }
+
+      container.innerHTML = currentFiles.map(file => {
+        const isSujo = checkSingleFileIsDirty(file);
+        const badge = isSujo ? '<span class="text-[9px] bg-red-950 text-red-400 px-1 rounded">sujo</span>' : '';
+        return `<div class="p-1.5 hover:bg-borderGreen rounded cursor-pointer flex justify-between items-center truncate border-b border-borderGreen/10" onclick="openFile('${file}')">
+          <span class="truncate">📄 ${file}</span>
+          ${badge}
+        </div>`;
+      }).join('');
+    }
+
+    function checkSingleFileIsDirty(filename) {
+      const content = fileContents[filename] || "";
+      return PATS.some(p => {
+        p.re.lastIndex = 0;
+        const test = p.re.test(content);
+        p.re.lastIndex = 0;
+        return test;
+      });
+    }
+
+    function openFile(filename) {
+      activeFile = filename;
+      document.getElementById('currentFileName').innerText = `📝 ${filename}`;
+      document.getElementById('fileContent').value = fileContents[filename] || "";
+      showSection('editor');
+    }
+
+    function filterFiles() {
+      const term = document.getElementById('fileSearch').value.toLowerCase();
+      const filtered = currentFiles.filter(f => f.toLowerCase().includes(term));
+      const container = document.getElementById('fileList');
+      container.innerHTML = filtered.map(file => {
+        const isSujo = checkSingleFileIsDirty(file);
+        const badge = isSujo ? '<span class="text-[9px] bg-red-950 text-red-400 px-1 rounded">sujo</span>' : '';
+        return `<div class="p-1.5 hover:bg-borderGreen rounded cursor-pointer flex justify-between items-center truncate border-b border-borderGreen/10" onclick="openFile('${file}')">
+          <span class="truncate">📄 ${file}</span>
+          ${badge}
+        </div>`;
+      }).join('');
+    }
+
+    function saveCurrentFileChanges() {
+      if (!activeFile) return alert("Selecione um arquivo!");
+      fileContents[activeFile] = document.getElementById('fileContent').value;
+      alert("Alteração salva na memória!");
+      renderFileList();
+    }
+
+    async function downloadModifiedZip() {
+      showLoader("Gerando ZIP...");
+      const zip = new JSZip();
+      currentFiles.forEach(file => {
+        zip.file(file, fileContents[file]);
+      });
+      const content = await zip.generateAsync({type:"blob"});
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(content);
+      link.download = "projeto-oficina-sk.zip";
+      link.click();
+      hideLoader();
+    }
+
+    // ==================== EXTRATOR WEB JURÍDICO ====================
+    function setExtractorUrl(url) {
+      document.getElementById('extractorUrl').value = url;
+    }
+
+    async function fetchViaProxy(url) {
+      let lastErr = null;
+      for (let i = 0; i < PROXIES.length; i++) {
+        const p = PROXIES[i];
+        try {
+          const r = await fetch(p.fn(url));
+          if (!r.ok) continue;
+          const text = await r.text();
+          if (text.length > 40) return text;
+        } catch (e) { lastErr = e; }
+      }
+      throw new Error("Falha ao acessar o site via proxies.");
+    }
+
+    async function runWebExtractor() {
+      let url = document.getElementById('extractorUrl').value.trim();
+      if (!url) return alert("Insira uma URL.");
+      if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+
+      showLoader("Varrendo site jurídico...");
+      try {
+        const html = await fetchViaProxy(url);
+        
+        // Parsing básico
+        const title = html.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1] || "Sem Título";
+        const textContent = html.replace(/<script[\s\S]*?<\/script>/gi, "").replace(/<[^>]+>/g, " ").replace(/\s{2,}/g," ").trim();
+        
+        // Scripts de cálculo
+        const scripts = [];
+        const p = /<script(?![^>]+src=)[^>]*>([\s\S]*?)<\/script>/gi;
+        let m;
+        while ((m = p.exec(html)) !== null) {
+          const c = (m[1] ?? "").trim();
+          if (c.length > 30) {
+            const isCalc = /calc|cálculo|previdenci|inss|aposentad|correção|juros/i.test(c);
+            scripts.push({ content: c, isCalc });
+          }
+        }
+
+        extractedData = { url, title, textContent, scripts };
+
+        // Atualizar UI do Extrator
+        document.getElementById('extPagesCount').innerText = "1";
+        document.getElementById('extScriptsCount').innerText = scripts.filter(s => s.isCalc).length;
+        document.getElementById('extLinksCount').innerText = (html.match(/href=/g) || []).length;
+        document.getElementById('extApisCount').innerText = (html.match(/\/api\//g) || []).length;
+
+        document.getElementById('extractorResults').classList.remove('hidden');
+
+        // Renderizar subtabs
+        renderExtractorOverview();
+      } catch(e) {
+        alert(e.message);
+      } finally {
+        hideLoader();
+      }
+    }
+
+    function showExtSubTab(tabId) {
+      document.querySelectorAll('.ext-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.ext-subtab').forEach(b => b.className = "ext-subtab text-xs py-1 px-3 text-textGreen");
+      
+      document.getElementById(`ext-subtab-${tabId}`).classList.remove('hidden');
+      event.target.className = "ext-subtab text-xs py-1 px-3 border-b-2 border-brandGreen text-white";
+
+      if (tabId === 'scripts') renderExtractorScripts();
+      if (tabId === 'text') renderExtractorText();
+    }
+
+    function renderExtractorOverview() {
+      const panel = document.getElementById('ext-subtab-overview');
+      panel.innerHTML = `
+        <div class="bg-darkBg p-4 rounded-lg border border-borderGreen">
+          <h3 class="text-brandGreen font-bold text-sm">🏷️ ${extractedData.title}</h3>
+          <p class="text-xs text-gray-400 mt-1">URL: ${extractedData.url}</p>
+          <button onclick="importExtractedToProject()" class="mt-3 bg-brandGreen text-darkBg px-3 py-1.5 rounded text-xs font-bold hover:bg-focusGreen">📥 Importar Texto para o Editor</button>
+        </div>`;
+    }
+
+    function renderExtractorScripts() {
+      const panel = document.getElementById('ext-subtab-scripts');
+      const calcs = extractedData.scripts.filter(s => s.isCalc);
+      if (calcs.length === 0) {
+        panel.innerHTML = '<p class="text-xs text-gray-500 italic">Nenhum script de cálculo jurídico identificado.</p>';
+        return;
+      }
+      panel.innerHTML = calcs.map((s, i) => `
+        <div class="bg-darkBg border border-accentGold rounded-lg p-3 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs text-accentGold font-bold">⚖️ Script de Cálculo #${i+1}</span>
+            <button onclick="openScriptInEditor(${i})" class="text-[10px] bg-borderGreen text-brandGreen px-2 py-0.5 rounded">Abrir no Editor</button>
+          </div>
+          <pre class="text-[10px] font-mono text-textGreen overflow-x-auto max-h-32 p-2 bg-black/40 rounded">${s.content.slice(0, 500)}...</pre>
+        </div>
+      `).join('');
+    }
+
+    function renderExtractorText() {
+      const panel = document.getElementById('ext-subtab-text');
+      panel.innerHTML = `
+        <div class="bg-darkBg border border-borderGreen rounded-lg p-3">
+          <textarea readonly class="w-full h-64 bg-transparent text-xs font-mono text-textGreen outline-none resize-none">${extractedData.textContent}</textarea>
+        </div>`;
+    }
+
+    function importExtractedToProject() {
+      if (!extractedData) return;
+      const filename = "texto-extraido.txt";
+      if (!currentFiles.includes(filename)) {
+        currentFiles.push(filename);
+      }
+      fileContents[filename] = extractedData.textContent;
+      renderFileList();
+      openFile(filename);
+      alert("Texto importado para o arquivo 'texto-extraido.txt' no Editor!");
+    }
+
+    function openScriptInEditor(idx) {
+      const calcs = extractedData.scripts.filter(s => s.isCalc);
+      const filename = `script-calculo-${idx+1}.js`;
+      if (!currentFiles.includes(filename)) {
+        currentFiles.push(filename);
+      }
+      fileContents[filename] = calcs[idx].content;
+      renderFileList();
+      openFile(filename);
+    }
+
+    // ==================== SCANNER DE DEPENDÊNCIAS ====================
+    let scanResultsData = [];
+
+    function runScan() {
+      if (currentFiles.length === 0) return alert("Carregue um projeto primeiro!");
+      
+      const customTerm = document.getElementById('customSearchTerm').value.trim();
+      let customRegex = null;
+      if (customTerm) {
+        customRegex = new RegExp(customTerm, "gi");
+      }
+
+      scanResultsData = [];
+      showLoader("Escaneando arquivos...");
+
+      currentFiles.forEach(file => {
+        const content = fileContents[file] || "";
+        const lines = content.split('\n');
+        const hits = [];
+
+        lines.forEach((line, idx) => {
+          const foundLabels = [];
+          
+          PATS.forEach(p => {
+            p.re.lastIndex = 0;
+            if (p.re.test(line)) foundLabels.push(p.lb);
+            p.re.lastIndex = 0;
+          });
+
+          if (customRegex) {
+            customRegex.lastIndex = 0;
+            if (customRegex.test(line)) foundLabels.push(`busca:"${customTerm}"`);
+            customRegex.lastIndex = 0;
+          }
+
+          if (foundLabels.length > 0) {
+            hits.push({
+              ln: idx + 1,
+              txt: line.trim().slice(0, 150),
+              labels: foundLabels
+            });
+          }
+        });
+
+        if (hits.length > 0) {
+          scanResultsData.push({ nome: file, hits });
+        }
+      });
+
+      renderScanResults();
+      document.getElementById('scannerActions').classList.remove('hidden');
+      hideLoader();
+    }
+
+    function renderScanResults() {
+      const container = document.getElementById('scannerResults');
+      if (scanResultsData.length === 0) {
+        container.innerHTML = '<div class="text-center py-8 text-matrixGreen">🟢 Projeto Limpo! Nenhuma dependência indesejada encontrada.</div>';
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="text-xs text-red-400 mb-2 font-mono">⚠️ Encontrados ${scanResultsData.length} arquivos com referências indesejadas:</div>
+        <div class="space-y-2">
+          ${scanResultsData.map(res => `
+            <div class="bg-darkBg border border-red-950 rounded-lg overflow-hidden">
+              <div class="bg-red-950/20 px-3 py-2 flex justify-between items-center border-b border-red-950/40">
+                <span class="font-mono text-xs text-red-300 truncate cursor-pointer hover:underline" onclick="openFile('${res.nome}')">📄 ${res.nome}</span>
+                <button onclick="openFile('${res.nome}')" class="text-[10px] bg-brandGreen/20 text-brandGreen px-2 py-0.5 rounded hover:bg-brandGreen hover:text-black">Abrir no Editor</button>
+              </div>
+              <div class="p-2 space-y-1 bg-black/30">
+                ${res.hits.map(h => `
+                  <div class="text-[11px] font-mono text-red-200/80 flex gap-2">
+                    <span class="text-gray-600">L${h.ln}:</span>
+                    <span class="text-yellow-500/80 bg-yellow-500/10 px-1 rounded text-[9px]">${h.labels.join(', ')}</span>
+                    <span class="truncate">${h.txt}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>`;
+    }
+
+    function downloadScanReport() {
+      let txt = `=== RELATÓRIO DE DEPENDÊNCIAS ===\n`;
+      txt += `Gerado em: ${new Date().toLocaleString('pt-BR')}\n`;
+      txt += `Assinado: Maikon Caldeira OAB/MG 183712\n`;
+      txt += `Total de arquivos com problemas: ${scanResultsData.length}\n\n`;
+
+      scanResultsData.forEach(res => {
+        txt += `\n► ARQUIVO: ${res.nome}\n`;
+        res.hits.forEach(h => {
+          txt += `  [L${h.ln}] [${h.labels.join(', ')}] -> ${h.txt}\n`;
+        });
+      });
+
+      const blob = new Blob([txt], {type: "text/plain;charset=utf-8"});
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "relatorio-scanner-maikon.txt";
+      link.click();
+    }
+
+    async function autoCleanReplitFiles() {
+      if (!confirm("Remover automaticamente as linhas com referências do Replit?")) return;
+      
+      showLoader("Limpando arquivos...");
+      scanResultsData.forEach(res => {
+        let content = fileContents[res.nome] || "";
+        let lines = content.split('\n');
+        
+        let cleanLines = lines.filter(line => {
+          return !PATS.some(p => {
+            p.re.lastIndex = 0;
+            const isMatch = p.re.test(line);
+            p.re.lastIndex = 0;
+            return isMatch;
+          });
+        });
+
+        fileContents[res.nome] = cleanLines.join('\n');
+      });
+
+      alert("Arquivos limpos localmente! Iniciando download.");
+      await downloadModifiedZip();
+      runScan();
+    }
+
+    // ==================== COMBINAR APLICATIVOS (RECUPERADO) ====================
+    const COMBINER_STORAGE_KEY = "sk-combinador-v4:data";
+
+    function createEmptyApp() {
+      return {
+        id: Math.random().toString(36).slice(2, 9),
+        name: "",
+        sourceType: "github",
+        sourceLocation: "",
+        works: "",
+        broken: ""
+      };
+    }
+
+    function loadCombiner() {
+      try {
+        const raw = localStorage.getItem(COMBINER_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          appsToCombine = parsed.apps || [];
+          document.getElementById('combinerGoal').value = parsed.goal || "";
+        }
+      } catch(e) {}
+
+      if (appsToCombine.length === 0) {
+        appsToCombine.push(createEmptyApp());
+      }
+      renderAppCards();
+    }
+
+    function saveCombiner() {
+      const goal = document.getElementById('combinerGoal').value;
+      localStorage.setItem(COMBINER_STORAGE_KEY, JSON.stringify({ apps: appsToCombine, goal }));
+    }
+
+    function renderAppCards() {
+      const container = document.getElementById('appsContainer');
+      container.innerHTML = appsToCombine.map((app, idx) => `
+        <div class="bg-darkBg border border-borderGreen rounded-xl p-4 space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-brandGreen text-xs font-bold uppercase">📦 Código/App de Origem #${idx + 1}</span>
+            ${appsToCombine.length > 1 ? `<button onclick="removeAppCard('${app.id}')" class="text-xs text-red-400 hover:underline">Remover</button>` : ''}
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input type="text" value="${app.name}" onchange="updateAppField('${app.id}', 'name', this.value)" placeholder="Nome (ex: PWA Jurídico)" class="bg-panelBg border border-borderGreen rounded-lg px-3 py-1.5 text-xs text-textGreen outline-none">
+            <select onchange="updateAppField('${app.id}', 'sourceType', this.value)" class="bg-panelBg border border-borderGreen rounded-lg px-3 py-1.5 text-xs text-textGreen outline-none">
+              <option value="github" ${app.sourceType === 'github' ? 'selected' : ''}>GitHub</option>
+              <option value="zip" ${app.sourceType === 'zip' ? 'selected' : ''}>Arquivo ZIP</option>
+            </select>
+            <input type="text" value="${app.sourceLocation}" onchange="updateAppField('${app.id}', 'sourceLocation', this.value)" placeholder="Link do GitHub ou Nome do ZIP" class="bg-panelBg border border-borderGreen rounded-lg px-3 py-1.5 text-xs text-textGreen outline-none">
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <textarea rows="2" onchange="updateAppField('${app.id}', 'works', this.value)" placeholder="✅ O que funciona perfeitamente..." class="bg-panelBg border border-borderGreen rounded-lg px-3 py-2 text-xs text-textGreen outline-none resize-none">${app.works}</textarea>
+            <textarea rows="2" onchange="updateAppField('${app.id}', 'broken', this.value)" placeholder="❌ O que está quebrado..." class="bg-panelBg border border-borderGreen rounded-lg px-3 py-2 text-xs text-textGreen outline-none resize-none">${app.broken}</textarea>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addAppCard() {
+      appsToCombine.push(createEmptyApp());
+      renderAppCards();
+      saveCombiner();
+    }
+
+    function removeAppCard(id) {
+      appsToCombine = appsToCombine.filter(app => app.id !== id);
+      renderAppCards();
+      saveCombiner();
+    }
+
+    function updateAppField(id, field, value) {
+      appsToCombine = appsToCombine.map(app => app.id === id ? { ...app, [field]: value } : app);
+      saveCombiner();
+    }
+
+    function clearCombiner() {
+      if (confirm("Limpar dados do combinador?")) {
+        appsToCombine = [createEmptyApp()];
+        document.getElementById('combinerGoal').value = "";
+        document.getElementById('promptResultContainer').classList.add('hidden');
+        renderAppCards();
+        saveCombiner();
+      }
+    }
+
+    function generateSuperPrompt() {
+      const goal = document.getElementById('combinerGoal').value.trim();
+      const filled = appsToCombine.filter(a => a.name || a.sourceLocation || a.works);
+
+      let prompt = `Estou usando o SK Oficina Jurídica v4 e preciso unificar códigos de projetos diferentes em uma única versão estável.
+
+🎯 OBJETIVO DO PROJETO UNIFICADO:
+${goal ? goal : "Combinar os códigos mantendo a estabilidade e eliminando erros de dependência/Replit."}
+
+--------------------------------------------------
+📦 FONTES DE CÓDIGO A SEREM ANALISADAS:
+`;
+
+      filled.forEach((app, idx) => {
+        prompt += `\n[CÓDIGO ${idx + 1}: ${app.name || 'Sem Nome'}]\n`;
+        prompt += `- Origem: ${app.sourceType === 'github' ? 'Repositório GitHub' : 'Arquivo ZIP'}\n`;
+        prompt += `- Endereço/Referência: ${app.sourceLocation || 'Não especificado'}\n`;
+        prompt += `- ✅ O QUE FUNCIONA E DEVE SER MANTIDO:\n  ${app.works || 'Não especificado'}\n`;
+        prompt += `- ❌ O QUE ESTÁ QUEBRADO E DEVE SER CORRIGIDO:\n  ${app.broken || 'Não especificado'}\n`;
+      });
+
+      prompt += `
+--------------------------------------------------
+🛠️ INSTRUÇÕES DE ARQUITETURA PARA A IA (CRÍTICAS):
+1. NÃO comece o projeto do zero. Aproveite a lógica de importação de arquivos pesados e persistência local que já funciona.
+2. Remova qualquer dependência desnecessária do Replit (como arquivos .replit, replit.nix ou pacotes que dependem de terminal).
+3. O projeto final deve rodar como um PWA de arquivo único (HTML/JS) ou uma estrutura limpa de Vite+React que possa ser aberta diretamente no navegador sem precisar de servidores locais complexos.
+4. Explique detalhadamente quais partes de código você unificou e de qual arquivo original elas vieram.
+5. Apresente o código pronto e limpo para ser copiado.`;
+
+      document.getElementById('generatedPromptTextarea').value = prompt;
+      document.getElementById('promptResultContainer').classList.remove('hidden');
+    }
+
+    function copyGeneratedPrompt() {
+      const txt = document.getElementById('generatedPromptTextarea');
+      txt.select();
+      document.execCommand('copy');
+      alert("Prompt copiado! Cole na sua IA preferida.");
+    }
+
+    // Inicialização
+    window.onload = () => {
+      loadCombiner();
+      showSection('importar');
+    };
+  </script>
+</body>
+</html>

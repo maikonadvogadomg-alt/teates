@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia do Ollama</title>
+<style>
+:root{--bg:#f4f2ea;--papel:#fffdf6;--fg:#1f2230;--mut:#5f6372;--linha:#ddd8c4;--ouro:#8a7b45;--claro:#efe7c8;--bom:#2f7a55;--bombg:#e4f2ea;--ruim:#a8322a;--ruimbg:#f8e4e1;--avbg:#f6eed2}
+@media (prefers-color-scheme:dark){:root{--bg:#12141c;--papel:#1a1d28;--fg:#ebe8dc;--mut:#a3a6b4;--linha:#2e3242;--ouro:#d2bf7d;--claro:#2b2818;--bom:#7fd3a6;--bombg:#17291f;--ruim:#f19a90;--ruimbg:#331b19;--avbg:#2a2516;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.6 system-ui,"Segoe UI",Roboto,sans-serif;padding:20px 16px 80px}
+main{max-width:760px;margin:0 auto;display:grid;gap:14px}
+h1{font-size:32px;line-height:1.15;margin:0}
+h2{font-size:20px;margin:0}
+h3{font-size:18px;margin:14px 0 4px}
+p{margin:6px 0}ul,ol{padding-left:22px;margin:6px 0}li{margin:5px 0}
+code{font-family:ui-monospace,Consolas,monospace;font-size:15px;background:var(--claro);padding:1px 6px;border-radius:4px;word-break:break-word}
+.mut{color:var(--mut)}
+details{background:var(--papel);border:1px solid var(--linha);border-radius:12px}
+summary{cursor:pointer;padding:15px 16px;list-style:none;display:flex;gap:10px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";margin-left:auto;color:var(--ouro);font-weight:700;font-size:20px}
+details[open]>summary::after{content:"－"}
+details[open]>summary{border-bottom:1px solid var(--linha)}
+.n{flex:none;width:32px;height:32px;border-radius:50%;background:var(--ouro);color:var(--papel);display:grid;place-items:center;font-weight:700}
+.d{padding:8px 16px 16px}
+.cx{padding:12px 14px;border-radius:10px;border-left:5px solid;margin:10px 0}
+.bom{background:var(--bombg);border-color:var(--bom)}.ruim{background:var(--ruimbg);border-color:var(--ruim)}.av{background:var(--avbg);border-color:var(--ouro)}
+.cmd{display:flex;gap:8px;align-items:flex-start;background:var(--bg);border:1px solid var(--linha);border-radius:8px;padding:8px 10px;margin:6px 0}
+.cmd pre{margin:0;flex:1;min-width:0;white-space:pre-wrap;word-break:break-all;font:15px/1.5 ui-monospace,Consolas,monospace}
+.cmd small{display:block;color:var(--mut);font:14px/1.4 system-ui,sans-serif;margin-top:2px;white-space:normal}
+.cmd button{flex:none;font:600 14px system-ui,sans-serif;background:var(--ouro);color:var(--papel);border:0;border-radius:6px;padding:8px 10px;cursor:pointer}
+.tab{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:16px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--linha);vertical-align:top}
+th{font-size:13px;text-transform:uppercase;color:var(--mut)}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>🦙 Guia do Ollama</h1>
+<p class="mut">A IA que roda dentro do seu próprio computador (ou celular), sem internet e de graça. Toque num assunto para abrir. Os comandos têm botão <b>Copiar</b>.</p>
+</header>
+
+<div class="cx av"><b>Em uma frase:</b> o <b>Ollama</b> é o "aparelho". Os <b>modelos</b> (llama, phi, qwen, gemma…) são os "cérebros" que você baixa para dentro dele. Cada cérebro fica guardado até você apagar.</div>
+
+<details open><summary><span class="n">1</span><h2>Ver quais cérebros você tem</h2></summary><div class="d">
+<p>Abra um terminal (veja a parte 6) e digite:</p>
+<div class="cmd"><pre>ollama list<small>Mostra todos os modelos baixados, o tamanho de cada um e quando foram baixados.</small></pre><button type="button">Copiar</button></div>
+<p>Você disse que apareceram <b>5</b>. É normal: cada vez que se pede um modelo que não existe, ele baixa. Cada um ocupa de 1 a 5 GB no disco.</p>
+<div class="cmd"><pre>ollama ps<small>Mostra qual está "ligado" na memória agora (o que está respondendo).</small></pre><button type="button">Copiar</button></div>
+</div></details>
+
+<details><summary><span class="n">2</span><h2>Qual cérebro fala português</h2></summary><div class="d">
+<p>Os que costumam responder bem em português:</p>
+<div class="tab"><table><thead><tr><th>Modelo</th><th>Tamanho</th><th>Bom para</th></tr></thead><tbody>
+<tr><td><code>phi4-mini</code></td><td>~2,5 GB</td><td>É o da <b>Microsoft</b> (o que respondeu em português para você). Bom equilíbrio.</td></tr>
+<tr><td><code>qwen2.5:3b</code></td><td>~2 GB</td><td>Muito bom em português, rápido no PC.</td></tr>
+<tr><td><code>gemma3:4b</code></td><td>~3 GB</td><td>Do Google. Bom em português; um pouco mais pesado.</td></tr>
+<tr><td><code>gemma3:1b</code></td><td>~800 MB</td><td>Leve. O melhor para <b>celular</b> ou PC fraco (responde mais simples).</td></tr>
+<tr><td><code>llama3.2</code></td><td>~2 GB</td><td>Tende a responder em <b>inglês</b> se não mandar falar português.</td></tr>
+</tbody></table></div>
+<p>Para baixar um deles (exemplo):</p>
+<div class="cmd"><pre>ollama pull qwen2.5:3b</pre><button type="button">Copiar</button></div>
+<div class="cx bom">Dica: fique com <b>um ou dois</b> que falem português e apague o resto (parte 4). Sobra espaço e você não se confunde.</div>
+</div></details>
+
+<details><summary><span class="n">3</span><h2>Fazer ele responder sempre em português</h2></summary><div class="d">
+<h3>Conversando no terminal</h3>
+<div class="cmd"><pre>ollama run phi4-mini<small>Liga o modelo e abre a conversa. Troque "phi4-mini" pelo nome que aparece no "ollama list".</small></pre><button type="button">Copiar</button></div>
+<p>Logo depois que ele abrir (aparece <code>&gt;&gt;&gt;</code>), cole isto e Enter:</p>
+<div class="cmd"><pre>/set system Responda sempre em português do Brasil, de forma simples.</pre><button type="button">Copiar</button></div>
+<p>Agora é só escrever a pergunta e Enter. Para sair da conversa:</p>
+<div class="cmd"><pre>/bye</pre><button type="button">Copiar</button></div>
+<h3>No Mini SK para PC</h3>
+<p>O Mini SK já manda a IA falar português. Se ainda vier em inglês, é o modelo (troque para <code>phi4-mini</code> ou <code>qwen2.5:3b</code>).</p>
+</div></details>
+
+<details><summary><span class="n">4</span><h2>Apagar os que não usa (liberar espaço)</h2></summary><div class="d">
+<div class="cmd"><pre>ollama rm llama3.2<small>Apaga o modelo do disco. Troque pelo nome que você quer apagar (veja no "ollama list").</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>ollama stop phi4-mini<small>Não apaga: só tira da memória (o PC fica mais leve). Ele volta quando você usar de novo.</small></pre><button type="button">Copiar</button></div>
+</div></details>
+
+<details><summary><span class="n">5</span><h2>Usar dentro do Mini SK (no computador)</h2></summary><div class="d">
+<ol>
+<li>Deixe o <b>Ollama aberto</b>: o ícone da lhama 🦙 perto do relógio do Windows. Se não estiver, abra "Ollama" no menu Iniciar. <b>Não feche</b> a janela preta se ele estiver rodando nela.</li>
+<li>No Mini SK: <b>🤖 IA</b> → <b>⚙️ Chaves</b> → <b>＋</b> → no tipo, escolha <b>Ollama (no seu PC, grátis — sem chave)</b>.</li>
+<li>Toque em <b>Buscar modelos</b> e escolha o que fala português (ex.: <code>phi4-mini</code>).</li>
+<li>Mande "oi" e <b>espere</b>: a 1ª resposta demora de 1 a 3 minutos (ele carrega o cérebro na memória). As próximas são bem mais rápidas.</li>
+</ol>
+<div class="cx av">Se não responder: no terminal, rode <code>ollama ps</code>. Se não aparecer nada e o "ollama list" funcionar, o Ollama está ligado — é só esperar a 1ª carga. Se der erro de conexão, o Ollama está fechado: abra de novo.</div>
+</div></details>
+
+<details><summary><span class="n">6</span><h2>Onde digitar os comandos (terminal)</h2></summary><div class="d">
+<h3>No computador — jeito mais fácil</h3>
+<ol><li>Aperte a tecla <b>Windows</b>, escreva <b>cmd</b> e Enter. Abre a janela preta do Windows.</li>
+<li>Cole o comando (botão direito do mouse cola) e Enter.</li></ol>
+<h3>No computador — dentro do Mini SK</h3>
+<ol><li>Atualize para a versão <b>15/10-c</b> (o terminal ficou grande).</li>
+<li>Botão <b>💻 Terminal PC</b> → <b>⛶ Tela cheia</b>. Escreva o comando e Enter.</li></ol>
+<div class="cx av">O terminal do Mini SK serve bem para <code>ollama list</code>, <code>ollama pull</code>, <code>ollama rm</code>, <code>npm</code>, <code>git</code>. Para <b>conversar</b> (<code>ollama run</code>), use a janela preta do Windows ou a 🤖 IA do Mini SK.</div>
+</div></details>
+
+<details><summary><span class="n">7</span><h2>No celular (Termux): ele fica ou vai embora?</h2></summary><div class="d">
+<p><b>Fica.</b> O modelo que você baixou está guardado no celular, dentro do Termux, até você apagar. Ele só <b>funciona</b> enquanto o Termux está aberto com o Ollama ligado.</p>
+<p>Para usar de novo, no Termux:</p>
+<div class="cmd"><pre>ollama serve &gt; /dev/null 2&gt;&amp;1 &amp;<small>Liga o Ollama "por trás" (só uma vez cada vez que abrir o Termux).</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>ollama list</pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>ollama run gemma3:1b<small>Troque pelo nome que aparecer no list. Depois use o /set system da parte 3 para falar português.</small></pre><button type="button">Copiar</button></div>
+<div class="cx ruim"><b>Sinceramente:</b> no celular ele é muito lento (você viu: quase uma hora para três frases), esquenta e gasta bateria. Use só para testar. No dia a dia do celular, a IA pela internet (Gemini grátis) é muito melhor. Para apagar e liberar espaço: <code>ollama rm nome-do-modelo</code>.</div>
+</div></details>
+
+<details><summary><span class="n">8</span><h2>Resumo de bolso</h2></summary><div class="d">
+<div class="tab"><table><thead><tr><th>Quero…</th><th>Comando</th></tr></thead><tbody>
+<tr><td>ver o que tenho</td><td><code>ollama list</code></td></tr>
+<tr><td>baixar um cérebro</td><td><code>ollama pull nome</code></td></tr>
+<tr><td>conversar</td><td><code>ollama run nome</code></td></tr>
+<tr><td>falar português</td><td><code>/set system Responda sempre em português do Brasil.</code></td></tr>
+<tr><td>sair da conversa</td><td><code>/bye</code></td></tr>
+<tr><td>ver o que está ligado</td><td><code>ollama ps</code></td></tr>
+<tr><td>desligar um da memória</td><td><code>ollama stop nome</code></td></tr>
+<tr><td>apagar do disco</td><td><code>ollama rm nome</code></td></tr>
+</tbody></table></div>
+</div></details>
+
+<p class="mut" style="text-align:center">Feito para o Maikon · outubro de 2026</p>
+</main>
+<script>
+document.addEventListener('click',async function(e){var b=e.target.closest('.cmd button');if(!b)return;var p=b.parentElement.querySelector('pre').cloneNode(true);var s=p.querySelector('small');if(s)s.remove();var t=p.textContent.trim();try{await navigator.clipboard.writeText(t);b.textContent='Copiado'}catch(x){var r=document.createRange();r.selectNodeContents(b.parentElement.querySelector('pre'));var g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent='Selecionado'}setTimeout(function(){b.textContent='Copiar'},1500)});
+</script>
+</body>
+</html>

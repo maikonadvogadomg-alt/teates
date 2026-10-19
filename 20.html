@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual do Maikon</title>
+<style>
+:root{--bg:#f4f2ea;--papel:#fffdf6;--fg:#1f2230;--mut:#5f6372;--linha:#ddd8c4;--ouro:#8a7b45;--claro:#efe7c8;--bom:#2f7a55;--bombg:#e4f2ea;--ruim:#a8322a;--ruimbg:#f8e4e1;--avbg:#f6eed2}
+@media (prefers-color-scheme:dark){:root{--bg:#12141c;--papel:#1a1d28;--fg:#ebe8dc;--mut:#a3a6b4;--linha:#2e3242;--ouro:#d2bf7d;--claro:#2b2818;--bom:#7fd3a6;--bombg:#17291f;--ruim:#f19a90;--ruimbg:#331b19;--avbg:#2a2516;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.6 system-ui,"Segoe UI",Roboto,sans-serif;padding:20px 16px 80px}
+main{max-width:760px;margin:0 auto;display:grid;gap:14px}
+h1{font-size:34px;line-height:1.15;margin:0}
+h2{font-size:20px;margin:0}
+h3{font-size:18px;margin:16px 0 4px}
+p{margin:6px 0}
+ul,ol{padding-left:22px;margin:6px 0}li{margin:5px 0}
+code{font-family:ui-monospace,Consolas,monospace;font-size:15px;background:var(--claro);padding:1px 6px;border-radius:4px;word-break:break-word}
+.mut{color:var(--mut)}
+details{background:var(--papel);border:1px solid var(--linha);border-radius:12px}
+summary{cursor:pointer;padding:15px 16px;list-style:none;display:flex;gap:10px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";margin-left:auto;color:var(--ouro);font-weight:700;font-size:20px}
+details[open]>summary::after{content:"－"}
+details[open]>summary{border-bottom:1px solid var(--linha)}
+.n{flex:none;width:32px;height:32px;border-radius:50%;background:var(--ouro);color:var(--papel);display:grid;place-items:center;font-weight:700}
+.d{padding:8px 16px 16px}
+.cx{padding:12px 14px;border-radius:10px;border-left:5px solid;margin:10px 0}
+.bom{background:var(--bombg);border-color:var(--bom)}.ruim{background:var(--ruimbg);border-color:var(--ruim)}.av{background:var(--avbg);border-color:var(--ouro)}
+.cmd{display:flex;gap:8px;align-items:flex-start;background:var(--bg);border:1px solid var(--linha);border-radius:8px;padding:8px 10px;margin:6px 0}
+.cmd pre{margin:0;flex:1;min-width:0;white-space:pre-wrap;word-break:break-all;font:15px/1.5 ui-monospace,Consolas,monospace}
+.cmd small{display:block;color:var(--mut);font:14px/1.4 system-ui,sans-serif;margin-top:2px;white-space:normal}
+.cmd button{flex:none;font:600 14px system-ui,sans-serif;background:var(--ouro);color:var(--papel);border:0;border-radius:6px;padding:8px 10px;cursor:pointer}
+.tab{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:16px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--linha);vertical-align:top}
+th{font-size:13px;text-transform:uppercase;color:var(--mut)}
+#busca{width:100%;font:18px system-ui,sans-serif;padding:12px 14px;border:2px solid var(--linha);border-radius:10px;background:var(--papel);color:var(--fg)}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>📘 Manual do Maikon</h1>
+<p class="mut">Como usar repositório, terminal, portas e comandos, e como conferir se as coisas estão funcionando. Toque num assunto para abrir. Os comandos têm botão <b>Copiar</b>.</p>
+</header>
+<input id="busca" type="search" placeholder="🔍 Procurar (ex.: porta, erro 500, GitHub)…">
+
+<details><summary><span class="n">1</span><h2>Palavras que aparecem toda hora</h2></summary><div class="d">
+<div class="tab"><table><thead><tr><th>Palavra</th><th>O que é, em português simples</th></tr></thead><tbody>
+<tr><td><b>Código</b></td><td>Os arquivos de texto que fazem o app funcionar (.html, .js, .ts, .tsx, .css, .json).</td></tr>
+<tr><td><b>Repositório</b> (repo)</td><td>Uma pasta guardada no GitHub, na internet. Guarda o código e todas as versões antigas. É o “cofre” do projeto.</td></tr>
+<tr><td><b>GitHub</b></td><td>O site onde ficam os repositórios. É de graça.</td></tr>
+<tr><td><b>Commit</b></td><td>“Salvar uma versão” no repositório, com um recado do que mudou.</td></tr>
+<tr><td><b>Push / Pull</b></td><td>Push = mandar do seu aparelho para o GitHub. Pull = puxar do GitHub para o aparelho.</td></tr>
+<tr><td><b>Terminal</b></td><td>A janela preta onde se escreve comandos. No PC: “Prompt de Comando” ou “PowerShell”. No celular: Termux.</td></tr>
+<tr><td><b>Comando</b></td><td>Uma ordem escrita no terminal, ex.: <code>npm install</code>. Escreve e aperta Enter.</td></tr>
+<tr><td><b>Node.js</b></td><td>Programa gratuito que faz os apps com servidor rodarem no PC. Sem ele, o <code>iniciar.bat</code> não funciona.</td></tr>
+<tr><td><b>npm</b></td><td>Vem junto com o Node. Baixa as “peças” que o projeto precisa (pasta <code>node_modules</code>).</td></tr>
+<tr><td><b>Servidor</b> (backend)</td><td>A parte do app que fica “ligada” esperando pedidos: banco de dados, IA, login. O jurídico e o CodeLens têm servidor. O Mini SK e o Colador não têm: são só HTML.</td></tr>
+<tr><td><b>Porta</b></td><td>O “número da porta” por onde o servidor atende, ex.: 5000. O endereço fica <code>http://localhost:5000</code>.</td></tr>
+<tr><td><b>localhost</b> / <b>127.0.0.1</b></td><td>“Este próprio aparelho”. Só funciona no aparelho onde o servidor está ligado.</td></tr>
+<tr><td><b>Build</b></td><td>“Montar a versão final” do app, mais leve, numa pasta (normalmente <code>dist</code>).</td></tr>
+<tr><td><b>PWA</b></td><td>Site que se instala como app pelo Chrome (⋮ → Instalar app). Precisa de <code>manifest.json</code> e <code>sw.js</code>.</td></tr>
+<tr><td><b>APK</b></td><td>Instalador de app Android.</td></tr>
+<tr><td><b>.exe</b></td><td>Programa do Windows.</td></tr>
+<tr><td><b>Electron</b></td><td>Ferramenta que transforma um site em programa .exe.</td></tr>
+<tr><td><b>Capacitor</b> / <b>EAS</b></td><td>Ferramentas que transformam o projeto em APK. EAS é para projetos Expo.</td></tr>
+<tr><td><b>Actions</b></td><td>Os “robôs” do GitHub que montam o APK ou o .exe na nuvem, de graça. Você só aperta “Run workflow”.</td></tr>
+<tr><td><b>Workflow</b></td><td>A receita que o robô segue. Fica em <code>.github/workflows/</code> (arquivo .yml).</td></tr>
+<tr><td><b>Artifact</b> (no GitHub)</td><td>O resultado que o robô entrega para baixar (o APK, o zip do .exe).</td></tr>
+<tr><td><b>.env</b> / <b>token</b> / <b>chave</b></td><td>Senhas. Nunca mande para ninguém nem ponha no GitHub.</td></tr>
+<tr><td><b>Deploy</b></td><td>Publicar o app na internet (Netlify, Vercel, GitHub Pages).</td></tr>
+</tbody></table></div>
+</div></details>
+
+<details><summary><span class="n">2</span><h2>Primeiro de tudo: salvar o código que funciona</h2></summary><div class="d">
+<div class="cx av">Se um app funciona, <b>guarde o código dele antes de mexer</b>. Com o código guardado, nada se perde.</div>
+<h3>Da Replit</h3>
+<ol>
+<li>Abra o projeto na Replit.</li>
+<li>No painel <b>Files</b> (arquivos), toque nos <b>três pontinhos ⋮</b> do topo da lista.</li>
+<li>Toque em <b>Download as zip</b>. O zip vai para Downloads.</li>
+<li>Se não aparecer essa opção no celular, peça ao agente da Replit: <i>“me dê o projeto inteiro como zip para baixar”</i>.</li>
+</ol>
+<h3>Do GitHub</h3>
+<ol><li>Abra o repositório → botão verde <b>Code</b> → <b>Download ZIP</b>.</li></ol>
+<h3>Onde guardar</h3>
+<ul><li>No Google Drive (pasta própria, ex.: “Códigos”), num pen drive e no computador. Em <b>dois lugares</b>, no mínimo.</li>
+<li>Coloque a data no nome: <code>juridico-2026-10-10.zip</code>.</li></ul>
+</div></details>
+
+<details><summary><span class="n">3</span><h2>Usar o GitHub pelo celular</h2></summary><div class="d">
+<h3>Criar um repositório</h3>
+<ol><li>github.com → foto no canto → <b>Your repositories</b> → <b>New</b>.</li>
+<li>Nome sem espaço (ex.: <code>juridico</code>) → <b>Private</b> (só você vê) → <b>Create repository</b>.</li></ol>
+<h3>Colocar arquivos dentro</h3>
+<ol><li>No repositório: <b>Add file</b> → <b>Upload files</b> → escolha os arquivos (extraídos, não o zip) → <b>Commit changes</b>.</li>
+<li>Pelo Mini SK é mais fácil: 🐙 GitHub → ele manda a pasta inteira.</li></ol>
+<h3>Mandar o robô montar (APK / .exe)</h3>
+<ol><li>No repositório, aba <b>Actions</b>.</li>
+<li>Na lista da esquerda, toque no nome do workflow (ex.: “SK Editor V3 — .exe”).</li>
+<li>Botão <b>Run workflow</b> → <b>Run workflow</b> verde.</li>
+<li>Espere (5 a 15 min). <span style="color:var(--bom)">✔ verde</span> = deu certo. <span style="color:var(--ruim)">✖ vermelho</span> = deu erro.</li>
+<li>Verde: toque na execução → desça até <b>Artifacts</b> → baixe.</li>
+<li>Vermelho: toque na execução → no passo com ✖ → tire print das últimas linhas vermelhas.</li></ol>
+<div class="cx av"><b>Não aparece “Run workflow”?</b> O repositório não tem a pasta <code>.github/workflows</code>, ou ela não subiu (pastas que começam com ponto às vezes ficam para trás no upload pelo celular). O Mini SK manda essa pasta certinho.</div>
+<h3>Guardar senha no cofre (Secrets)</h3>
+<ol><li>Repositório → <b>Settings</b> → <b>Secrets and variables</b> → <b>Actions</b> → <b>New repository secret</b>.</li>
+<li>Nome (ex.: <code>EXPO_TOKEN</code>) e o valor. Fica trancado: nem você vê de novo.</li></ol>
+</div></details>
+
+<details><summary><span class="n">4</span><h2>Abrir o terminal</h2></summary><div class="d">
+<h3>No computador (Windows)</h3>
+<ul><li>Jeito mais fácil: abra a pasta do projeto, clique na <b>barra de endereço</b> lá em cima, apague, escreva <code>cmd</code> e Enter. Abre a janela preta <b>já dentro da pasta</b>.</li>
+<li>Ou: botão Iniciar → escreva “cmd” → Prompt de Comando.</li></ul>
+<h3>No celular</h3>
+<ul><li>App <b>Termux</b> (baixe pelo F-Droid ou GitHub, a versão da Play Store é velha).</li></ul>
+<h3>Truques que salvam</h3>
+<ul><li><b>Seta para cima</b> ↑ repete o último comando.</li>
+<li><b>Ctrl + C</b> para o que está rodando (no Termux: Volume-baixo + C).</li>
+<li>Copiar no terminal do Windows: selecione e clique com o botão direito. Colar: botão direito.</li>
+<li>Comando escrito errado não estraga nada, só dá aviso.</li></ul>
+</div></details>
+
+<details><summary><span class="n">5</span><h2>Os comandos mais importantes</h2></summary><div class="d">
+<h3>Andar entre pastas</h3>
+<div class="cmd"><pre>cd nome-da-pasta<small>Entrar numa pasta.</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>cd ..<small>Voltar uma pasta.</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>dir<small>Windows: listar o que tem na pasta. (No Termux é <code>ls</code>.)</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>cls<small>Limpar a tela no Windows. (No Termux: <code>clear</code>.)</small></pre><button type="button">Copiar</button></div>
+<h3>Conferir se o Node está instalado</h3>
+<div class="cmd"><pre>node -v<small>Tem que aparecer algo como v22.x. Se disser “não é reconhecido”, instale em nodejs.org (LTS).</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>npm -v</pre><button type="button">Copiar</button></div>
+<h3>Ligar um projeto com servidor (jurídico, CodeLens…)</h3>
+<div class="cmd"><pre>npm install<small>Baixa as peças. Só na 1ª vez, ou quando der “Cannot find module”. Demora.</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>npm run dev<small>Liga em modo de teste. Mostra o endereço (ex.: http://localhost:5000).</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>npm run build<small>Monta a versão final.</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>npm start<small>Liga a versão final (depois do build).</small></pre><button type="button">Copiar</button></div>
+<div class="cx av">Não sabe quais comandos o projeto tem? Abra o arquivo <code>package.json</code> e procure a parte <b>"scripts"</b>. Cada nome ali vira <code>npm run NOME</code>.</div>
+<h3>Termux (celular)</h3>
+<div class="cmd"><pre>pkg update -y && pkg upgrade -y<small>Atualizar o Termux. Faça primeiro.</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>pkg install -y nodejs-lts git unzip<small>Instala Node, git e unzip.</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>termux-setup-storage<small>Deixa o Termux ver a pasta Downloads (fica em <code>~/storage/downloads</code>).</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>unzip -o ~/storage/downloads/ARQUIVO.zip -d ~/projeto<small>Extrai um zip. Troque ARQUIVO pelo nome.</small></pre><button type="button">Copiar</button></div>
+<h3>git (para quem usar no PC ou Termux)</h3>
+<div class="cmd"><pre>git clone https://github.com/SEU-USUARIO/SEU-REPO<small>Baixa um repositório inteiro.</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>git pull<small>Puxa as novidades do GitHub.</small></pre><button type="button">Copiar</button></div>
+</div></details>
+
+<details><summary><span class="n">6</span><h2>Portas: como conferir se está funcionando</h2></summary><div class="d">
+<p>Quando o servidor liga, a janela preta mostra algo como <code>serving on port 5000</code> ou <code>http://localhost:5000</code>. Esse número é a porta.</p>
+<h3>Teste 1 — o mais simples</h3>
+<ol><li>Deixe a janela preta <b>aberta</b> (fechou, desligou).</li>
+<li>No navegador do <b>mesmo aparelho</b>, escreva <code>http://localhost:5000</code> (troque 5000 pelo número que apareceu).</li></ol>
+<div class="tab"><table><thead><tr><th>O que aparece</th><th>Quer dizer</th></tr></thead><tbody>
+<tr><td>O app abre</td><td>✅ Está funcionando.</td></tr>
+<tr><td>“Não é possível acessar esse site” / “Recusou a conexão”</td><td>O servidor não está ligado, ou é outra porta. Olhe a janela preta.</td></tr>
+<tr><td>Página branca</td><td>O servidor está ligado, mas a tela quebrou. No PC aperte <b>F12</b> → aba <b>Console</b> → print do vermelho.</td></tr>
+<tr><td><b>Erro 500</b></td><td>O servidor está ligado, mas deu defeito lá dentro (quase sempre o banco de dados). O motivo aparece na janela preta.</td></tr>
+<tr><td><b>Erro 404</b></td><td>O servidor está ligado, mas aquele endereço não existe.</td></tr>
+</tbody></table></div>
+<h3>Teste 2 — quem está usando a porta (Windows)</h3>
+<div class="cmd"><pre>netstat -ano | findstr :5000<small>Se aparecer uma linha com LISTENING, alguém está usando a porta 5000. O último número da linha é o “PID” (o número do programa).</small></pre><button type="button">Copiar</button></div>
+<div class="cmd"><pre>taskkill /PID 1234 /F<small>Fecha à força o programa que prendeu a porta. Troque 1234 pelo PID.</small></pre><button type="button">Copiar</button></div>
+<h3>Teste 2 — no Termux</h3>
+<div class="cmd"><pre>curl -I http://127.0.0.1:5000<small>Se responder “HTTP/1.1 200” está funcionando. “Connection refused” = desligado.</small></pre><button type="button">Copiar</button></div>
+<div class="cx bom">Os seus <b>jurídico-local</b> e <b>CodeLens-local</b> novos já escolhem sozinhos uma porta livre e mostram o endereço na janela preta. Se já estiver aberto, ele reaproveita.</div>
+</div></details>
+
+<details><summary><span class="n">7</span><h2>Erros comuns e o que fazer</h2></summary><div class="d">
+<div class="tab"><table><thead><tr><th>Mensagem</th><th>O que fazer</th></tr></thead><tbody>
+<tr><td><code>'node' não é reconhecido</code> / <code>command not found</code></td><td>Instale o Node.js (nodejs.org, LTS) e abra uma janela preta nova.</td></tr>
+<tr><td><code>Cannot find module</code></td><td>Rode <code>npm install</code> dentro da pasta do projeto.</td></tr>
+<tr><td><code>EADDRINUSE</code> / “address already in use”</td><td>A porta está ocupada (o app já está aberto em outra janela). Feche a outra janela, ou use o Teste 2 das portas.</td></tr>
+<tr><td><code>Aborted()</code> / “press any key”</td><td>O banco ficou travado porque a janela foi fechada no X. Na pasta <code>dados</code>, apague só o arquivo <code>postmaster.pid</code> e abra de novo. Para fechar sempre: <b>Ctrl + C</b>.</td></tr>
+<tr><td>Erro 500 na Vercel</td><td>Banco incompleto ou <code>DATABASE_URL</code> errada. Vercel → projeto → <b>Logs</b> mostra o motivo.</td></tr>
+<tr><td><code>ENOENT</code></td><td>Arquivo ou pasta não encontrado. Você está na pasta errada (use <code>dir</code> para ver onde está).</td></tr>
+<tr><td><code>EACCES</code> / “permission denied”</td><td>Sem permissão. No Windows, não deixe o projeto dentro de “Arquivos de Programas”. Use Documentos.</td></tr>
+<tr><td>Algo com <code>replit</code> ou <code>REPL_ID</code></td><td>Sobrou peça da Replit. O 🏗️ Preparar do Mini SK tira.</td></tr>
+<tr><td>“Windows protegeu o computador”</td><td><b>Mais informações</b> → <b>Executar assim mesmo</b>. Aparece em programa novo sem assinatura.</td></tr>
+<tr><td>App “não instalado” / “já existe” (APK)</td><td>Desinstale o antigo, ou troque o nome do pacote (ex.: <code>com.maikon.app2</code>).</td></tr>
+<tr><td><code>npm ERR!</code> no meio do install</td><td>Rode de novo. Se repetir, apague a pasta <code>node_modules</code> e rode <code>npm install</code>.</td></tr>
+</tbody></table></div>
+</div></details>
+
+<details><summary><span class="n">8</span><h2>Transformar em app: PWA, APK ou .exe</h2></summary><div class="d">
+<h3>PWA (o mais fácil, de graça)</h3>
+<ol><li>Precisa ter <code>index.html</code>, <code>manifest.json</code> e <code>sw.js</code> (o Mini SK cria).</li>
+<li>Abra <b>app.netlify.com/drop</b> e arraste a pasta (ou o zip).</li>
+<li>Abra o endereço no Chrome → ⋮ → <b>Instalar app</b>.</li></ol>
+<p class="mut">Só serve para app sem servidor (HTML puro). App com servidor precisa da Vercel ou do PC ligado.</p>
+<h3>APK</h3>
+<ul><li><b>Projeto HTML:</b> Mini SK → 📦 APK.</li>
+<li><b>Projeto Expo:</b> Caça-Bug → Consertar para o EAS → Mini SK → ☁️ EAS.</li>
+<li><b>Projeto com Capacitor:</b> sobe no GitHub → Actions → Run workflow → Artifacts.</li></ul>
+<h3>.exe (programa do Windows)</h3>
+<ol><li>O projeto precisa ter a pasta <code>electron</code> e o arquivo <code>.github/workflows/desktop-exe.yml</code> (o 🏗️ Preparar do Mini SK cria os dois).</li>
+<li>Sobe no GitHub → <b>Actions</b> → <b>Run workflow</b>.</li>
+<li>Verde → <b>Artifacts</b> → baixa um <b>zip</b> → extrai → abre o <b>.exe</b>.</li></ol>
+<div class="cx ruim"><b>.exe que fecha ou fica branco:</b> se o app tem servidor (banco, IA), o .exe precisa levar o servidor junto. Para o jurídico e o CodeLens, o caminho mais certo é o <b>iniciar.bat</b> com o Node instalado.</div>
+</div></details>
+
+<details><summary><span class="n">9</span><h2>Como pedir ajuda para qualquer IA (e ela entender)</h2></summary><div class="d">
+<p>Mande sempre estas 5 coisas:</p>
+<ol><li><b>Qual app</b> e <b>qual versão</b> (o nome do arquivo).</li>
+<li><b>Como abriu</b>: site, app instalado, iniciar.bat, Termux, APK.</li>
+<li><b>O que fez</b>, passo a passo.</li>
+<li><b>O que esperava</b> e <b>o que aconteceu</b>.</li>
+<li><b>Print do erro</b>: janela preta (últimas linhas), F12 Console, ou passo vermelho do GitHub. Nunca com senha aparecendo.</li></ol>
+<p>Modelo para copiar:</p>
+<div class="cmd"><pre>App: ____ (versão ____). Abri pelo ____. Fiz: ____. Esperava: ____. Aconteceu: ____. Segue o print do erro. Me responda em português simples, um passo por vez, e me diga só o que eu preciso tocar.</pre><button type="button">Copiar</button></div>
+<div class="cx av">Peça <b>um passo por vez</b>. Quando a IA mandar 10 arquivos de uma vez, peça: “junte tudo num zip só e me diga só onde eu coloco”.</div>
+</div></details>
+
+<details><summary><span class="n">10</span><h2>Segurança</h2></summary><div class="d">
+<ul>
+<li>Nunca mande para ninguém, nem em print: <b>tokens</b> (GitHub, Expo), <b>chaves de IA</b>, <b>DATABASE_URL</b>, arquivos <code>.env</code>, <code>.pem</code>, <code>.key</code>, <code>.keystore</code>.</li>
+<li>Senha só vai: dentro do próprio app (🔑), no cofre do GitHub (Secrets) ou nas variáveis da Vercel.</li>
+<li>Vazou? Apague a chave no site e crie outra.</li>
+<li>SQL que começa com <code>DROP TABLE</code> apaga dados.</li>
+<li>Repositório com código de cliente: sempre <b>Private</b>.</li>
+</ul>
+</div></details>
+
+<details><summary><span class="n">11</span><h2>Cartão rápido (o resumo de tudo)</h2></summary><div class="d">
+<ol>
+<li>Funciona? <b>Guarde o código</b> em dois lugares antes de mexer.</li>
+<li>App com servidor no PC: Node instalado → pasta extraída → <code>iniciar.bat</code> (ou <code>npm install</code> e <code>npm run dev</code>).</li>
+<li>Conferir: navegador em <code>http://localhost:PORTA</code>.</li>
+<li>Erro: leia a janela preta, tire print das últimas linhas.</li>
+<li>Fechar: <b>Ctrl + C</b>, nunca no X.</li>
+<li>App sem servidor: Netlify Drop → Instalar app.</li>
+<li>APK/.exe: GitHub → Actions → Run workflow → Artifacts.</li>
+</ol>
+</div></details>
+
+<p class="mut" style="text-align:center">Feito para o Maikon · outubro de 2026</p>
+</main>
+<script>
+document.addEventListener('click',async function(e){var b=e.target.closest('.cmd button');if(!b)return;var p=b.parentElement.querySelector('pre').cloneNode(true);var s=p.querySelector('small');if(s)s.remove();var t=p.textContent.trim();try{await navigator.clipboard.writeText(t);b.textContent='Copiado'}catch(x){var r=document.createRange();r.selectNodeContents(b.parentElement.querySelector('pre'));var g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent='Selecionado'}setTimeout(function(){b.textContent='Copiar'},1500)});
+document.getElementById('busca').addEventListener('input',function(e){var q=e.target.value.trim().toLowerCase();document.querySelectorAll('main>details').forEach(function(d){var tem=!q||d.textContent.toLowerCase().indexOf(q)>=0;d.hidden=!tem;d.open=!!q&&tem})});
+</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Maikon Caldeira — Aplicativos</title>
+<!--
+  ÍNDICE AUTOMÁTICO (18/10-a)
+  Coloque nesta MESMA pasta os seus códigos com nome de número: 1.html, 2.html, 3.html…
+  Ele acha sozinho. Não precisa cadastrar nada, e nunca "volta ao zero" no APK ou no celular novo.
+  - Nome do cartão  = o <title> de cada arquivo (ex.: <title>📁 Filtrador</title>)
+  - Ícone           = o emoji do começo do <title>, ou <meta name="icone" content="⚖️">
+  - Descrição       = <meta name="description" content="Analisador de dados">
+  Para mudar um nome, mude o <title> dentro do arquivo. Pronto.
+-->
+<style>
+:root { --fundo:#0b0b0a; --cartao:#151513; --borda:#3a372c; --ouro:#a8a27c; --ouro2:#cfc8a0; --txt:#ecebe4; --mut:#9c9888; color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--fundo); color: var(--txt); font: 16px/1.4 Georgia, "Times New Roman", serif; }
+header { text-align: center; padding: 34px 16px 10px; }
+.selo { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 18px; background: var(--ouro); border: 4px solid #f3efdc; display: grid; place-items: center; font-size: 60px; font-weight: 700; color: #111; box-shadow: 0 0 30px rgba(168,162,124,.35); }
+h1 { margin: 0; font-size: clamp(26px, 8vw, 40px); letter-spacing: .14em; font-weight: 700; }
+.sub { color: var(--ouro2); letter-spacing: .32em; font-size: clamp(11px, 3.2vw, 14px); margin-top: 8px; }
+.conta { color: var(--mut); margin: 22px 0 6px; font-family: system-ui, sans-serif; font-size: 15px; }
+.busca { display: block; width: min(560px, calc(100% - 32px)); margin: 8px auto 4px; padding: 13px 16px; border-radius: 14px; border: 1px solid var(--borda); background: #111110; color: var(--txt); font: 16px system-ui, sans-serif; }
+.busca:focus { outline: 2px solid var(--ouro); border-color: transparent; }
+main { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; padding: 18px 16px 40px; max-width: 1100px; margin: 0 auto; }
+.app { background: var(--cartao); border: 1px solid var(--borda); border-radius: 20px; padding: 22px 14px 18px; text-align: center; color: var(--txt); cursor: pointer; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 180px; }
+.app:hover, .app:focus-visible { border-color: var(--ouro); outline: none; box-shadow: 0 0 0 2px rgba(168,162,124,.35); }
+.ic { font-size: 48px; line-height: 1; }
+.nome { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #d8d3bc; font-size: 15px; overflow-wrap: anywhere; }
+.desc { color: var(--mut); font-size: 13px; }
+.num { color: #6f6b5d; font: 12px system-ui, sans-serif; }
+.vazio { grid-column: 1 / -1; text-align: center; color: var(--mut); font-family: system-ui, sans-serif; padding: 30px 10px; line-height: 1.6; }
+.carregando { grid-column: 1 / -1; text-align: center; color: var(--mut); font-family: system-ui, sans-serif; }
+/* tela do app aberto aqui dentro */
+#tela { position: fixed; inset: 0; background: var(--fundo); display: flex; flex-direction: column; z-index: 5; }
+#tela[hidden] { display: none; }
+.topo { display: flex; align-items: center; gap: 8px; padding: 10px 12px; padding-top: calc(10px + env(safe-area-inset-top, 0px)); background: linear-gradient(135deg, var(--ouro), #857a5b); color: #17140b; font-family: system-ui, sans-serif; }
+.topo b { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.topo button { border: 0; border-radius: 10px; background: rgba(0,0,0,.18); color: inherit; font: 600 15px system-ui, sans-serif; padding: 10px 12px; min-height: 44px; cursor: pointer; }
+#quadro { flex: 1; border: 0; width: 100%; background: #fff; }
+</style>
+  <!-- PWA:inicio (gerado pelo Mini SK — pode refazer no painel 📱 PWA) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Teste">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <script>
+    if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+      addEventListener('load', function () { navigator.serviceWorker.register('service-worker.js').catch(function (e) { console.warn('Service worker:', e); }); });
+    }
+  </script>
+  <!-- PWA:fim -->
+</head>
+<body>
+<header>
+  <div class="selo" aria-hidden="true">M</div>
+  <h1>MAIKON CALDEIRA</h1>
+  <div class="sub">ADVOCACIA &amp; ESTRATÉGIA DIGITAL</div>
+  <div class="conta" id="conta">Procurando os aplicativos…</div>
+  <input class="busca" id="busca" type="search" placeholder="🔍 Procurar aplicativo…" autocomplete="off" aria-label="Procurar aplicativo">
+</header>
+<main id="grade"><div class="carregando">⏳ Procurando 1.html, 2.html, 3.html…</div></main>
+
+<section id="tela" hidden>
+  <div class="topo"><button id="voltar">← Voltar</button><b id="tela-nome"></b><button id="fora" title="Abrir em tela própria">↗</button></div>
+  <iframe id="quadro" title="Aplicativo aberto" allow="clipboard-read; clipboard-write; microphone; camera; fullscreen"></iframe>
+</section>
+
+<script>
+(function () {
+  'use strict';
+  var MAX = 500;          // procura até 500.html
+  var PARAR_APOS = 25;    // para depois de 25 números seguidos que não existem
+  var ICONES = ['📁','🗂️','⚖️','📄','🧮','🔍','🛠️','💡','📊','📝','🔗','🧪','🎙️','📦','🧰','📚'];
+  var apps = [], filtro = '';
+  var $ = function (s) { return document.querySelector(s); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
+  function lerInfo(n, html) {
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    var titulo = (doc.querySelector('title') && doc.querySelector('title').textContent || '').trim();
+    var meta = function (nome) { var m = doc.querySelector('meta[name="' + nome + '"]'); return m ? (m.getAttribute('content') || '').trim() : ''; };
+    var icone = meta('icone');
+    var m = titulo.match(/^(\p{Extended_Pictographic}(?:️|‍\p{Extended_Pictographic})*)\s*/u);
+    if (m) { if (!icone) icone = m[1]; titulo = titulo.slice(m[0].length); }
+    return { n: n, arquivo: n + '.html', nome: titulo || ('Código ' + n), icone: icone || ICONES[(n - 1) % ICONES.length], desc: meta('description') };
+  }
+
+  async function procurar() {
+    var faltas = 0, achados = [];
+    for (var lote = 1; lote <= MAX && faltas < PARAR_APOS; lote += 10) {
+      var nums = []; for (var i = lote; i < lote + 10 && i <= MAX; i++) nums.push(i);
+      var res = await Promise.all(nums.map(function (n) {
+        return fetch(n + '.html', { cache: 'no-cache' }).then(function (r) {
+          if (!r.ok) return null;
+          return r.text().then(function (t) { return /<html|<body|<div|<script|<!doctype/i.test(t) ? lerInfo(n, t) : null; });
+        }).catch(function () { return null; });
+      }));
+      res.forEach(function (a) { if (a) { achados.push(a); faltas = 0; } else faltas++; });
+      apps = achados.slice(); pintar();
+    }
+    $('#conta').textContent = '📊 ' + apps.length + ' aplicativo' + (apps.length === 1 ? '' : 's') + ' disponíve' + (apps.length === 1 ? 'l' : 'is');
+    if (!apps.length) {
+      $('#grade').innerHTML = '<div class="vazio">' + (location.protocol === 'file:'
+        ? 'Aberto direto do arquivo, o navegador não deixa eu procurar os códigos.<br>Abra pelo site (GitHub Pages / Netlify) ou pelo APK / programa.'
+        : 'Nenhum código achado.<br>Coloque nesta mesma pasta os arquivos <b>1.html</b>, <b>2.html</b>, <b>3.html</b>… e abra de novo.') + '</div>';
+    }
+  }
+
+  function pintar() {
+    var v = apps.filter(function (a) { return !filtro || (a.nome + ' ' + a.desc + ' ' + a.n).toLowerCase().indexOf(filtro) >= 0; });
+    $('#grade').innerHTML = v.map(function (a) {
+      return '<button class="app" data-n="' + a.n + '"><span class="ic">' + esc(a.icone) + '</span><span class="nome">' + esc(a.nome) + '</span>' +
+        (a.desc ? '<span class="desc">' + esc(a.desc) + '</span>' : '') + '<span class="num">' + a.arquivo + '</span></button>';
+    }).join('') || (apps.length ? '<div class="vazio">Nada com "' + esc(filtro) + '".</div>' : '<div class="carregando">⏳ Procurando…</div>');
+  }
+
+  function abrir(a) {
+    $('#tela-nome').textContent = a.icone + ' ' + a.nome;
+    $('#quadro').src = a.arquivo;
+    $('#tela').hidden = false;
+    history.pushState({ app: a.n }, '');
+  }
+  function fechar() { $('#tela').hidden = true; $('#quadro').src = 'about:blank'; }
+
+  $('#grade').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-n]'); if (!b) return;
+    var a = apps.find(function (x) { return String(x.n) === b.dataset.n; }); if (a) abrir(a);
+  });
+  $('#busca').addEventListener('input', function (e) { filtro = e.target.value.trim().toLowerCase(); pintar(); });
+  $('#voltar').onclick = function () { if (history.state && history.state.app) history.back(); else fechar(); };
+  $('#fora').onclick = function () { var u = $('#quadro').src; if (u && u !== 'about:blank') window.open(u, '_blank'); };
+  window.addEventListener('popstate', function () { if (!$('#tela').hidden) fechar(); });
+
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(function () {});
+  procurar();
+})();
+</script>
+</body>
+</html>

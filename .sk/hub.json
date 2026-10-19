@@ -1,0 +1,353 @@
+{
+  "titulo": "teste",
+  "arquivo": "hub.html",
+  "itens": [
+    {
+      "path": "1.html",
+      "nome": "🧹 Faxina de Repetidos",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "2.html",
+      "nome": "Numerador de Códigos",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "3.html",
+      "nome": "Multi-Projetos PWA — Maikon Caldeira",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "4.html",
+      "nome": "Catalogador de Códigos",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "5.html",
+      "nome": "Celular e PC Livres",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "6.html",
+      "nome": "Guia do Ollama",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "7.html",
+      "nome": "Kit do Replit",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "8.html",
+      "nome": "Colador de Links",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "9.html",
+      "nome": "Projeto Lab",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "10.html",
+      "nome": "AI Code Studio",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "11.html",
+      "nome": "Maikon Caldeira — Aplicativos",
+      "desc": "",
+      "on": false,
+      "icone": "icon-192.png"
+    },
+    {
+      "path": "12.html",
+      "nome": "Raio-X de Pacotes",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "13.html",
+      "nome": "Raio-X de Pacotes",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "14.html",
+      "nome": "Comparador de Versões",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "15.html",
+      "nome": "Comparador de Versões",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "16.html",
+      "nome": "Laboratório HTML",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "17.html",
+      "nome": "Assistente Jurídico Pro",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "18.html",
+      "nome": "SK Oficina Jurídica v4 - Maikon Caldeira",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "19.html",
+      "nome": "Chat IA Pro — Saulo",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "20.html",
+      "nome": "Manual do Maikon",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "21.html",
+      "nome": "Comunicações Processuais",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "22.html",
+      "nome": "Limpador de Processos",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "23.html",
+      "nome": "Guia dos Apps do Maikon",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "24.html",
+      "nome": "Organizador de Documentos",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "25.html",
+      "nome": "Perito de Metadados",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "26.html",
+      "nome": "Triagem de Código",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "27.html",
+      "nome": "Raio-X de Projetos",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "28.html",
+      "nome": "Extrator de Sites",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "29.html",
+      "nome": "📱 Gerenciador de PWA",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "30.html",
+      "nome": "Colecionador de Comandos",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "31.html",
+      "nome": "Instalador · Organizador do Celular (Termux)",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "32.html",
+      "nome": "Console de Desenvolvimento - Teste de Lógica",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "33.html",
+      "nome": "APK Builder — Iara Suite",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "34.html",
+      "nome": "Editor Jurídico Pro",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "35.html",
+      "nome": "Editor Jurídico",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "36.html",
+      "nome": "Robô Jurídico - Núcleo Base",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "37.html",
+      "nome": "🔍 Analisador de Logs ZIP",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "38.html",
+      "nome": "Editor Jurídico - Iara",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "39.html",
+      "nome": "🔧 PWA Builder — Gerador de Instalação",
+      "desc": "",
+      "on": false,
+      "icone": "icon-192.png"
+    },
+    {
+      "path": "40.html",
+      "nome": "🔧 ConstruAPK Pro — Analisador e Gerador",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "41.html",
+      "nome": "Scanner — Detector de Dependências",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "42.html",
+      "nome": "Backup para o HD",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "43.html",
+      "nome": "Numerador de Códigos",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "44.html",
+      "nome": "Preparador Universal",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "45.html",
+      "nome": "Arrumador de Backups",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "46.html",
+      "nome": "Gerador de Plano de Projeto",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "47.html",
+      "nome": "RECEITA.md",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "48.html",
+      "nome": "Juntador de Arquivos",
+      "desc": "",
+      "on": false,
+      "icone": "icons/icon-192.png"
+    },
+    {
+      "path": "index.html",
+      "nome": "Maikon Caldeira — Aplicativos",
+      "desc": "",
+      "on": true,
+      "icone": "icons/icon.svg"
+    }
+  ],
+  "sub": "",
+  "logo": "",
+  "tema": "escuro",
+  "links": []
+}

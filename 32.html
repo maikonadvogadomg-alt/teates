@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console de Desenvolvimento - Teste de Lógica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            height: 100vh;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .painel {
+            display: flex;
+            flex-direction: column;
+            background-color: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .painel-header {
+            background-color: #2d2d30;
+            padding: 10px;
+            border-bottom: 1px solid #3e3e42;
+            font-weight: bold;
+            color: #4ec9b0;
+        }
+
+        .painel-conteudo {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border: none;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            resize: none;
+        }
+
+        textarea:focus {
+            outline: none;
+            background-color: #252526;
+        }
+
+        .console-linha {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-left: 3px solid #3e3e42;
+            padding-left: 8px;
+        }
+
+        .console-entrada {
+            color: #ce9178;
+            border-left-color: #ce9178;
+        }
+
+        .console-saida {
+            color: #4ec9b0;
+            border-left-color: #4ec9b0;
+        }
+
+        .console-erro {
+            color: #f48771;
+            border-left-color: #f48771;
+        }
+
+        .console-aviso {
+            color: #dcdcaa;
+            border-left-color: #dcdcaa;
+        }
+
+        .console-info {
+            color: #569cd6;
+            border-left-color: #569cd6;
+        }
+
+        .botoes {
+            display: flex;
+            gap: 5px;
+            padding: 10px;
+            border-top: 1px solid #3e3e42;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 8px 12px;
+            background-color: #0e639c;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #1177bb;
+        }
+
+        button.danger {
+            background-color: #d13438;
+        }
+
+        button.danger:hover {
+            background-color: #e81123;
+        }
+
+        button.success {
+            background-color: #107c10;
+        }
+
+        button.success:hover {
+            background-color: #13a538;
+        }
+
+        .variavel {
+            background-color: #1e1e1e;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-left: 3px solid #569cd6;
+            border-radius: 2px;
+        }
+
+        .variavel-nome {
+            color: #9cdcfe;
+            font-weight: bold;
+        }
+
+        .variavel-valor {
+            color: #ce9178;
+            margin-left: 10px;
+        }
+
+        .variavel-tipo {
+            color: #4ec9b0;
+            font-size: 10px;
+        }
+
+        .inspecionador {
+            background-color: #1e1e1e;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid #3e3e42;
+            border-radius: 3px;
+        }
+
+        .inspecionador-titulo {
+            color: #4ec9b0;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .inspecionador-conteudo {
+            color: #d4d4d4;
+            font-size: 11px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid #3e3e42;
+            background-color: #2d2d30;
+        }
+
+        .tab {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #858585;
+            font-size: 12px;
+        }
+
+        .tab.ativo {
+            color: #007acc;
+            border-bottom-color: #007acc;
+        }
+
+        .tab-conteudo {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .tab-conteudo.ativo {
+            display: block;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #464647;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5a5a5a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- PAINEL 1: EDITOR DE CÓDIGO -->
+        <div class="painel">
+            <div class="painel-header">📝 CÓDIGO JAVASCRIPT</div>
+            <textarea id="editor" placeholder="// Digite seu código aqui
+// Exemplo:
+let x = 10;
+let y = 20;
+console.log(x + y);">// Teste de lógica
+let soma = (a, b) => a + b;
+console.log('Resultado:', soma(5, 3));</textarea>
+            <div class="botoes">
+                <button class="success" onclick="executarCodigo()">▶️ EXECUTAR</button>
+                <button onclick="limparEditor()">🗑️ LIMPAR</button>
+                <button onclick="salvarCodigo()">💾 SALVAR</button>
+                <button class="danger" onclick="limparConsole()">❌ LIMPAR CONSOLE</button>
+            </div>
+        </div>
+
+        <!-- PAINEL 2: CONSOLE + VARIÁVEIS -->
+        <div class="painel">
+            <div class="tabs">
+                <div class="tab ativo" onclick="mudarTab(event, 'console')">📋 Console</div>
+                <div class="tab" onclick="mudarTab(event, 'variaveis')">🔍 Variáveis</div>
+            </div>
+
+            <!-- CONSOLE -->
+            <div id="console" class="tab-conteudo ativo">
+                <div class="painel-conteudo" id="saidaConsole">
+                    <div class="console-info">Console pronto para uso...</div>
+                </div>
+            </div>
+
+            <!-- VARIÁVEIS -->
+            <div id="variaveis" class="tab-conteudo">
+                <div class="painel-conteudo" id="listaVariaveis">
+                    <div class="console-info">Nenhuma variável rastreada...</div>
+                </div>
+            </div>
+
+            <div class="botoes">
+                <button onclick="inspecionarVariaveis()">🔎 INSPECIONAR</button>
+                <button onclick="exportarConsole()">📤 EXPORTAR</button>
+            </div>
+        </div>
+
+        <!-- PAINEL 3: DEBUGGER + ANÁLISE -->
+        <div class="painel">
+            <div class="tabs">
+                <div class="tab ativo" onclick="mudarTab(event, 'debugger')">🐛 Debugger</div>
+                <div class="tab" onclick="mudarTab(event, 'analise')">📊 Análise</div>
+            </div>
+
+            <!-- DEBUGGER -->
+            <div id="debugger" class="tab-conteudo ativo">
+                <div class="painel-conteudo" id="debuggerConteudo">
+                    <div class="console-info">Execute código para ver informações de debug...</div>
+                </div>
+            </div>
+
+            <!-- ANÁLISE -->
+            <div id="analise" class="tab-conteudo">
+                <div class="painel-conteudo" id="analiseConteudo">
+                    <div class="console-info">Análise de performance...</div>
+                </div>
+            </div>
+
+            <div class="botoes">
+                <button onclick="analisarCodigo()">🔬 ANALISAR</button>
+                <button onclick="testarPerformance()">⚡ PERFORMANCE</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // VARIÁVEIS GLOBAIS
+        // ============================================
+        let variaveisRastreadas = {};
+        let historico = [];
+        let tempoExecucao = 0;
+
+        // ============================================
+        // FUNÇÕES DE CONSOLE
+        // ============================================
+
+        function adicionarConsole(mensagem, tipo = 'info') {
+            const console_elem = document.getElementById('saidaConsole');
+            const linha = document.createElement('div');
+            linha.className = `console-linha console-${tipo}`;
+            
+            if (typeof mensagem === 'object') {
+                linha.textContent = JSON.stringify(mensagem, null, 2);
+            } else {
+                linha.textContent = String(mensagem);
+            }
+            
+            console_elem.appendChild(linha);
+            console_elem.scrollTop = console_elem.scrollHeight;
+            
+            historico.push({ mensagem, tipo, timestamp: new Date() });
+        }
+
+        function limparConsole() {
+            document.getElementById('saidaConsole').innerHTML = '';
+            historico = [];
+            adicionarConsole('Console limpo!', 'info');
+        }
+
+        // ============================================
+        // INTERCEPTAR console.log
+        // ============================================
+
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            originalLog(...args);
+            adicionarConsole(args.join(' '), 'saida');
+        };
+
+        console.error = function(...args) {
+            originalError(...args);
+            adicionarConsole(args.join(' '), 'erro');
+        };
+
+        console.warn = function(...args) {
+            originalWarn(...args);
+            adicionarConsole(args.join(' '), 'aviso');
+        };
+
+        // ============================================
+        // EXECUTAR CÓDIGO
+        // ============================================
+
+        function executarCodigo() {
+            const codigo = document.getElementById('editor').value;
+            
+            if (!codigo.trim()) {
+                adicionarConsole('⚠️ Digite algum código primeiro!', 'aviso');
+                return;
+            }
+
+            limparConsole();
+            adicionarConsole('▶️ Executando...', 'info');
+
+            const inicio = performance.now();
+
+            try {
+                // Cria um contexto isolado
+                const funcao = new Function(codigo);
+                funcao();
+                
+                tempoExecucao = performance.now() - inicio;
+                adicionarConsole(`✅ Executado com sucesso em ${tempoExecucao.toFixed(2)}ms`, 'saida');
+                
+            } catch (erro) {
+                adicionarConsole(`❌ ERRO: ${erro.message}`, 'erro');
+                adicionarConsole(`Linha: ${erro.stack}`, 'erro');
+            }
+
+            inspecionarVariaveis();
+        }
+
+        // ============================================
+        // INSPECIONAR VARIÁVEIS
+        // ============================================
+
+        function inspecionarVariaveis() {
+            const lista = document.getElementById('listaVariaveis');
+            lista.innerHTML = '';
+
+            // Pega todas as variáveis globais
+            for (let chave in window) {
+                if (chave.startsWith('_') || chave.includes('webkit')) continue;
+                
+                try {
+                    const valor = window[chave];
+                    
+                    if (typeof valor === 'function' || typeof valor === 'object') {
+                        continue;
+                    }
+
+                    const div = document.createElement('div');
+                    div.className = 'variavel';
+                    
+                    let tipo = typeof valor;
+                    let valorStr = String(valor);
+                    
+                    if (valorStr.length > 50) {
+                        valorStr = valorStr.substring(0, 50) + '...';
+                    }
+
+                    div.innerHTML = `
+                        <span class="variavel-nome">${chave}</span>
+                        <span class="variavel-tipo">[${tipo}]</span>
+                        <span class="variavel-valor">= ${valorStr}</span>
+                    `;
+                    
+                    lista.appendChild(div);
+                } catch (e) {
+                    // Ignora variáveis inacessíveis
+                }
+            }
+
+            if (lista.children.length === 0) {
+                lista.innerHTML = '<div class="console-info">Nenhuma variável encontrada</div>';
+            }
+        }
+
+        // ============================================
+        // ANALISAR CÓDIGO
+        // ============================================
+
+        function analisarCodigo() {
+            const codigo = document.getElementById('editor').value;
+            const debugger_elem = document.getElementById('debuggerConteudo');
+            debugger_elem.innerHTML = '';
+
+            // Análise básica
+            const linhas = codigo.split('\n').length;
+            const caracteres = codigo.length;
+            const funcoes = (codigo.match(/function\s+\w+|const\s+\w+\s*=\s*\(|let\s+\w+\s*=\s*\(/g) || []).length;
+            const variaveis = (codigo.match(/\b(let|const|var)\s+\w+/g) || []).length;
+
+            let analise = `
+📊 ANÁLISE DO CÓDIGO
+═══════════════════════════════════
+Linhas: ${linhas}
+Caracteres: ${caracteres}
+Variáveis: ${variaveis}
+Funções: ${funcoes}
+Tempo de execução: ${tempoExecucao.toFixed(2)}ms
+
+🔍 ESTRUTURA
+═══════════════════════════════════
+${codigo.split('\n').map((linha, idx) => {
+    return `${(idx + 1).toString().padStart(3, '0')}: ${linha}`;
+}).join('\n')}
+            `;
+
+            const div = document.createElement('div');
+            div.className = 'inspecionador';
+            div.innerHTML = `<div class="inspecionador-conteudo">${analise}</div>`;
+            debugger_elem.appendChild(div);
+        }
+
+        // ============================================
+        // PERFORMANCE
+        // ============================================
+
+        function testarPerformance() {
+            const codigo = document.getElementById('editor').value;
+            const analise_elem = document.getElementById('analiseConteudo');
+            analise_elem.innerHTML = '';
+
+            if (!codigo.trim()) {
+                adicionarConsole('⚠️ Digite código para testar performance!', 'aviso');
+                return;
+            }
+
+            try {
+                const funcao = new Function(codigo);
+
+                // Testa 1000 vezes
+                const inicio = performance.now();
+                for (let i = 0; i < 1000; i++) {
+                    funcao();
+                }
+                const tempo = performance.now() - inicio;
+                const media = tempo / 1000;
+
+                const resultado = `
+⚡ TESTE DE PERFORMANCE
+═══════════════════════════════════
+Execuções: 1000
+Tempo total: ${tempo.toFixed(2)}ms
+Tempo médio: ${media.toFixed(4)}ms
+Tempo por execução: ${(media * 1000).toFixed(2)}μs
+
+📈 RESULTADO
+═══════════════════════════════════
+${tempo < 100 ? '✅ EXCELENTE - Muito rápido!' : tempo < 500 ? '✅ BOM - Rápido' : '⚠️ LENTO - Pode otimizar'}
+                `;
+
+                const div = document.createElement('div');
+                div.className = 'inspecionador';
+                div.innerHTML = `<div class="inspecionador-conteudo">${resultado}</div>`;
+                analise_elem.appendChild(div);
+
+            } catch (erro) {
+                adicionarConsole(`❌ Erro no teste: ${erro.message}`, 'erro');
+            }
+        }
+
+        // ============================================
+        // UTILITÁRIOS
+        // ============================================
+
+        function limparEditor() {
+            if (confirm('Tem certeza que quer limpar o editor?')) {
+                document.getElementById('editor').value = '';
+            }
+        }
+
+        function salvarCodigo() {
+            const codigo = document.getElementById('editor').value;
+            localStorage.setItem('codigo_salvo', codigo);
+            adicionarConsole('💾 Código salvo no localStorage!', 'saida');
+        }
+
+        function exportarConsole() {
+            const texto = historico.map(h => `[${h.tipo.toUpperCase()}] ${h.mensagem}`).join('\n');
+            const blob = new Blob([texto], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'console_' + new Date().getTime() + '.txt';
+            a.click();
+        }
+
+        function mudarTab(event, tabId) {
+            // Remove ativo de todos os tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('ativo'));
+            document.querySelectorAll('.tab-conteudo').forEach(t => t.classList.remove('ativo'));
+
+            // Adiciona ativo ao clicado
+            event.target.classList.add('ativo');
+            document.getElementById(tabId).classList.add('ativo');
+        }
+
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+
+        window.addEventListener('load', () => {
+            // Carrega código salvo
+            const codigoSalvo = localStorage.getItem('codigo_salvo');
+            if (codigoSalvo) {
+                document.getElementById('editor').value = codigoSalvo;
+                adicionarConsole('📂 Código anterior carregado!', 'info');
+            }
+
+            adicionarConsole('✅ Console de Desenvolvimento Pronto!', 'saida');
+            adicionarConsole('Digite código no editor e clique em EXECUTAR', 'info');
+        });
+
+        console.log('🚀 Sistema de Debug Carregado');
+    </script>
+</body>
+</html>

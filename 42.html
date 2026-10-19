@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backup para o HD</title>
+<style>
+:root { --bg:#f2f1ec; --p:#fff; --f:#1c2220; --m:#5f6964; --l:#dad6cc; --v:#1f6b4f; --vc:#e3f1e9; --a:#fff3d3; --r:#a3332a; --rc:#fbe6e3; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#121614; --p:#1b211e; --f:#e7ece9; --m:#9fada6; --l:#2e3733; --v:#6fd1a4; --vc:#1d3329; --a:#33290f; --r:#f0958c; --rc:#3a1f1c; color-scheme:dark; } }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--f); font:18px/1.55 system-ui,"Segoe UI",Roboto,sans-serif; }
+header { background:#17312a; color:#fff; padding:14px 16px; } header b { font-size:21px; } header small { display:block; color:#b9d3c7; font-size:14px; }
+main { max-width:820px; margin:0 auto; padding:12px 16px 60px; }
+.c { background:var(--p); border:1px solid var(--l); border-radius:14px; padding:14px 16px; margin:12px 0; }
+h2 { font-size:20px; margin:2px 0 8px; }
+.m { color:var(--m); font-size:15px; }
+.bt { border:1px solid var(--l); background:var(--p); color:var(--f); border-radius:12px; padding:12px 16px; font:inherit; cursor:pointer; }
+.bt.v { background:var(--v); border-color:var(--v); color:#fff; font-weight:700; }
+.bt.r { background:var(--r); border-color:var(--r); color:#fff; }
+.bt.grande { display:block; width:100%; padding:16px; font-size:19px; margin-top:10px; }
+.bt:disabled { opacity:.5; cursor:not-allowed; }
+.lado { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+@media (max-width:640px) { .lado { grid-template-columns:1fr; } }
+.escolha { border:2px dashed var(--l); border-radius:12px; padding:12px; min-height:110px; }
+.escolha.ok { border-style:solid; border-color:var(--v); background:var(--vc); }
+.escolha b.nome { display:block; font-size:19px; word-break:break-all; }
+.aviso { background:var(--a); border-radius:10px; padding:10px 12px; font-size:15px; margin:8px 0; }
+.perigo { background:var(--rc); border-radius:10px; padding:10px 12px; font-size:15px; margin:8px 0; }
+.barra { height:22px; background:var(--l); border-radius:999px; overflow:hidden; margin:8px 0; }
+.barra div { height:100%; width:0; background:var(--v); transition:width .2s; }
+.big { font-size:28px; font-weight:800; color:var(--v); }
+table { width:100%; border-collapse:collapse; font-size:15px; }
+td { padding:8px 4px; border-bottom:1px solid var(--l); vertical-align:middle; }
+pre.log { white-space:pre-wrap; word-break:break-all; font:13px/1.5 ui-monospace,Consolas,monospace; background:var(--bg); border:1px solid var(--l); border-radius:10px; padding:10px; max-height:260px; overflow:auto; }
+label.g { display:flex; gap:10px; align-items:center; padding:4px 0; font-size:16px; } label.g input { width:22px; height:22px; }
+</style>
+</head>
+<body>
+<header><b>💾 Backup para o HD</b><small>Copia as suas pastas do computador para o HD externo · sem Drive · sem internet</small></header>
+<main>
+
+<div class="perigo" id="semsuporte" hidden>❌ Este navegador não consegue mexer em pastas. Abra este arquivo no <b>Google Chrome</b> ou no <b>Microsoft Edge</b>, no computador.</div>
+
+<div class="c">
+  <h2>Como funciona</h2>
+  <ol style="margin:0;padding-left:22px">
+    <li>Você escolhe <b>a pasta do computador</b> (ex.: Documentos, Clientes).</li>
+    <li>Você escolhe <b>onde guardar no HD</b> (crie uma pasta, ex.: "Backup PC"). Lá dentro ele cria uma pasta com o mesmo nome da pasta copiada, então dá para guardar várias pastas no mesmo lugar sem misturar.</li>
+    <li>Toca em <b>Copiar</b>. Na 1ª vez copia tudo; <b>das outras vezes, só o que é novo ou mudou</b>.</li>
+  </ol>
+  <div class="aviso">🛡️ Esta página <b>nunca apaga nada</b>: nem no computador, nem no HD. Ela só copia.</div>
+</div>
+
+<div class="c">
+  <h2>1 · O que copiar → para onde</h2>
+  <div class="lado">
+    <div class="escolha" id="box-origem"><span class="m">💻 Pasta do computador</span><b class="nome" id="nome-origem">— nenhuma ainda —</b><button class="bt" id="b-origem" style="margin-top:8px">📂 Escolher pasta</button></div>
+    <div class="escolha" id="box-destino"><span class="m">🗄️ Pasta no HD externo</span><b class="nome" id="nome-destino">— nenhuma ainda —</b><button class="bt" id="b-destino" style="margin-top:8px">📂 Escolher no HD</button></div>
+  </div>
+  <p class="m" style="margin:8px 0 0">Quando o Chrome perguntar <b>"Permitir que o site veja/edite os arquivos?"</b>, toque em <b>Ver arquivos</b> / <b>Salvar alterações</b>. Isso é só para esta página, no seu computador.</p>
+  <label class="g" style="margin-top:8px"><input type="checkbox" id="pular" checked> Pular pastas de programa que não precisam de backup (node_modules, lixeira, temporários)</label>
+  <button class="bt grande" id="b-olhar" disabled>🔍 Ver o que vai copiar</button>
+  <div id="previa"></div>
+</div>
+
+<div class="c" id="cx-copia" hidden>
+  <h2>2 · Copiando</h2>
+  <div class="barra"><div id="barra"></div></div>
+  <p id="status" style="margin:4px 0"></p>
+  <button class="bt r" id="b-parar">⏹ Parar</button>
+  <p class="m">Pode parar quando quiser: da próxima vez ele continua de onde parou.</p>
+</div>
+
+<div class="c">
+  <h2>⭐ Backups salvos (para repetir com 1 toque)</h2>
+  <div id="pares" class="m">Depois do primeiro backup, ele aparece aqui. Da próxima vez é só ligar o HD e tocar em ▶.</div>
+</div>
+
+<div class="c">
+  <h2>📜 Relatório</h2>
+  <pre class="log" id="log">Nada ainda.</pre>
+  <button class="bt" id="b-log">⬇ Baixar o relatório</button>
+</div>
+
+<div class="c m">
+  <b>Dúvidas comuns</b>
+  <ul style="padding-left:20px;margin:6px 0">
+    <li><b>"Não é possível abrir esta pasta porque ela contém arquivos do sistema":</b> o Chrome não deixa escolher pastas como o disco C: inteiro ou a pasta do usuário. Escolha uma pasta de dentro (Documentos, Imagens, Clientes…).</li>
+    <li><b>O HD não aparece:</b> veja se ele está em "Este Computador". Se não estiver, troque a porta USB.</li>
+    <li><b>Onde fica o registro do que já foi copiado?</b> Num arquivo <code>.backup-registro.json</code> dentro da pasta do HD. Não apague, senão ele copia tudo de novo (sem estragar nada, só demora).</li>
+    <li><b>Para recuperar:</b> é só abrir a pasta no HD. Os arquivos estão lá normais, do mesmo jeito do computador.</li>
+  </ul>
+</div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  const $ = (s) => document.querySelector(s);
+  const PULAR = new Set(['node_modules', '$recycle.bin', 'system volume information', '.trash', '.trashes', '.cache', '__pycache__', '.tmp', 'temp', 'tmp']);
+  const ARQ_PULAR = new Set(['desktop.ini', 'thumbs.db', '.ds_store', '.backup-registro.json', '.backup-registro.copia.json']);
+  const REG = '.backup-registro.json';
+  let origem = null, destino = null, parar = false, linhas = [];
+
+  const humano = (b) => { const u = ['bytes', 'KB', 'MB', 'GB', 'TB']; let i = 0; while (b >= 1024 && i < 4) { b /= 1024; i++; } return (i ? b.toFixed(1) : b.toFixed(0)).replace('.', ',') + ' ' + u[i]; };
+  const log = (t) => { linhas.push(new Date().toLocaleTimeString('pt-BR') + '  ' + t); if (linhas.length > 3000) linhas.shift(); const el = $('#log'); el.textContent = linhas.slice(-300).join('\n'); el.scrollTop = el.scrollHeight; };
+
+  // ── guardar as pastas escolhidas (para repetir com 1 toque) ──
+  const db = () => new Promise((ok, erro) => { const r = indexedDB.open('backup-hd', 1); r.onupgradeneeded = () => r.result.createObjectStore('pares'); r.onsuccess = () => ok(r.result); r.onerror = () => erro(r.error); });
+  async function paresTodos() { try { const d = await db(); return await new Promise((ok) => { const t = d.transaction('pares').objectStore('pares'); const a = []; const c = t.openCursor(); c.onsuccess = () => { const x = c.result; if (x) { a.push(Object.assign({ id: x.key }, x.value)); x.continue(); } else ok(a); }; c.onerror = () => ok([]); }); } catch (e) { return []; } }
+  async function parGuardar(id, v) { try { const d = await db(); await new Promise((ok) => { const t = d.transaction('pares', 'readwrite'); t.objectStore('pares').put(v, id); t.oncomplete = ok; t.onerror = ok; }); } catch (e) {} }
+  async function parApagar(id) { try { const d = await db(); await new Promise((ok) => { const t = d.transaction('pares', 'readwrite'); t.objectStore('pares').delete(id); t.oncomplete = ok; t.onerror = ok; }); } catch (e) {} }
+
+  async function permissao(h, modo) {
+    const o = { mode: modo };
+    if ((await h.queryPermission(o)) === 'granted') return true;
+    return (await h.requestPermission(o)) === 'granted';
+  }
+
+  function pintarEscolhas() {
+    $('#nome-origem').textContent = origem ? origem.name : '— nenhuma ainda —';
+    $('#nome-destino').textContent = destino ? destino.name : '— nenhuma ainda —';
+    $('#box-origem').classList.toggle('ok', !!origem); $('#box-destino').classList.toggle('ok', !!destino);
+    $('#b-olhar').disabled = !(origem && destino);
+    $('#previa').innerHTML = '';
+  }
+  async function escolher(qual) {
+    try {
+      const h = await window.showDirectoryPicker({ id: 'backup-' + qual, mode: qual === 'destino' ? 'readwrite' : 'read' });
+      if (qual === 'origem') origem = h; else destino = h;
+      pintarEscolhas();
+    } catch (e) {
+      if (e.name !== 'AbortError') alert('Não deu para usar essa pasta: ' + e.message + '\n\nSe for uma pasta do sistema (o disco C: inteiro, a pasta do usuário), escolha uma pasta de dentro dela.');
+    }
+  }
+
+  // ── olhar a pasta ──
+  async function listar(dir, caminho, lista, pular, aviso) {
+    for await (const [nome, h] of dir.entries()) {
+      if (parar) return;
+      const rel = caminho ? caminho + '/' + nome : nome;
+      if (h.kind === 'directory') {
+        if (pular && (PULAR.has(nome.toLowerCase()) || nome.startsWith('~$'))) continue;
+        try { await listar(h, rel, lista, pular, aviso); } catch (e) { log('⚠️ não consegui abrir a pasta: ' + rel); }
+      } else {
+        if (ARQ_PULAR.has(nome.toLowerCase()) || nome.startsWith('~$')) continue;
+        try { const f = await h.getFile(); lista.push({ rel, h, tam: f.size, data: f.lastModified }); if (aviso && lista.length % 500 === 0) aviso(lista.length); }
+        catch (e) { log('⚠️ não consegui ler: ' + rel); }
+      }
+    }
+  }
+  async function lerRegistro(dest) {
+    for (const n of [REG, '.backup-registro.copia.json']) {
+      try { const f = await (await dest.getFileHandle(n)).getFile(); return JSON.parse(await f.text()); } catch (e) {}
+    }
+    return { arquivos: {}, historico: [] };
+  }
+  async function gravarRegistro(dest, reg) {
+    const txt = JSON.stringify(reg);
+    for (const n of [REG, '.backup-registro.copia.json']) {
+      const w = await (await dest.getFileHandle(n, { create: true })).createWritable(); await w.write(txt); await w.close();
+    }
+  }
+  async function existeNoDestino(dest, rel, tam) {
+    try { let d = dest; const p = rel.split('/'); for (const x of p.slice(0, -1)) d = await d.getDirectoryHandle(x); const f = await (await d.getFileHandle(p[p.length - 1])).getFile(); return f.size === tam; } catch (e) { return false; }
+  }
+
+  async function calcular(org, dest, pular, aviso) {
+    const lista = []; await listar(org, '', lista, pular, aviso);
+    // cada pasta do computador ganha a sua própria pasta no HD (ex.: HD/Backup PC/Documentos)
+    let alvo = null; try { alvo = await dest.getDirectoryHandle(org.name); } catch (e) {}
+    const reg = alvo ? await lerRegistro(alvo) : { arquivos: {}, historico: [] };
+    const fazer = [];
+    for (const a of lista) {
+      const r = reg.arquivos[a.rel];
+      if (r && r[0] === a.tam && r[1] === a.data) continue;            // já copiado e não mudou
+      fazer.push(a);
+    }
+    return { lista, fazer, reg };
+  }
+
+  async function copiarUm(dest, a) {
+    const p = a.rel.split('/'); let d = dest;
+    for (const x of p.slice(0, -1)) d = await d.getDirectoryHandle(x, { create: true });
+    const nome = p[p.length - 1];
+    const fh = await d.getFileHandle(nome, { create: true });
+    const w = await fh.createWritable();
+    const f = await a.h.getFile();
+    try { await f.stream().pipeTo(w); }   // pipeTo fecha o arquivo no fim
+    catch (e) { try { await w.abort(); } catch (x) {} throw e; }
+    // confere o tamanho
+    const conf = await fh.getFile();
+    if (conf.size !== f.size) throw new Error('tamanho diferente depois de copiar');
+    return f;
+  }
+
+  async function executar(org, dest, pular) {
+    parar = false; linhas = [];
+    $('#cx-copia').hidden = false; $('#b-parar').disabled = false;
+    const st = $('#status'), barra = $('#barra');
+    st.textContent = 'Olhando os arquivos…'; barra.style.width = '0';
+    log('▶ Backup: "' + org.name + '" → HD "' + dest.name + '"');
+    const { fazer, reg, lista } = await calcular(org, dest, pular, (n) => { st.textContent = 'Olhando os arquivos… ' + n.toLocaleString('pt-BR'); });
+    const raizDest = dest; dest = await raizDest.getDirectoryHandle(org.name, { create: true });
+    log('Guardando em: ' + raizDest.name + ' / ' + org.name);
+    const total = fazer.reduce((s, a) => s + a.tam, 0);
+    log(lista.length + ' arquivos na pasta; ' + fazer.length + ' para copiar (' + humano(total) + ').');
+    let feito = 0, ok = 0, falha = 0, desdeGravar = 0; const ini = Date.now();
+    for (let i = 0; i < fazer.length; i++) {
+      if (parar) { log('⏹ Parado por você.'); break; }
+      const a = fazer[i];
+      try {
+        const f = await copiarUm(dest, a);
+        reg.arquivos[a.rel] = [f.size, f.lastModified]; ok++;
+      } catch (e) { falha++; log('❌ ' + a.rel + ' — ' + (e.message || e.name)); }
+      feito += a.tam; desdeGravar++;
+      if (desdeGravar >= 50) { desdeGravar = 0; try { await gravarRegistro(dest, reg); } catch (e) {} }
+      const pc = total ? feito / total : (i + 1) / fazer.length;
+      barra.style.width = (pc * 100).toFixed(1) + '%';
+      const seg = (Date.now() - ini) / 1000, vel = feito / Math.max(seg, 1), resta = vel ? (total - feito) / vel : 0;
+      st.innerHTML = '<b>' + (i + 1).toLocaleString('pt-BR') + ' de ' + fazer.length.toLocaleString('pt-BR') + '</b> · ' + humano(feito) + ' de ' + humano(total) + (resta > 5 ? ' · falta uns ' + (resta > 90 ? Math.round(resta / 60) + ' min' : Math.round(resta) + ' s') : '') + '<br><span class="m">' + a.rel + '</span>';
+    }
+    reg.historico.push({ quando: new Date().toLocaleString('pt-BR'), origem: org.name, copiados: ok, falhas: falha, bytes: feito, parado: parar });
+    await gravarRegistro(dest, reg);
+    barra.style.width = parar ? barra.style.width : '100%';
+    $('#b-parar').disabled = true;
+    const msg = (parar ? '⏹ Parado. ' : '✅ PRONTO! ') + ok.toLocaleString('pt-BR') + ' arquivos copiados' + (falha ? ', ' + falha + ' com problema (veja o relatório)' : '') + '.';
+    st.innerHTML = '<span class="big">' + msg + '</span>';
+    log(msg);
+    // guarda para repetir
+    await parGuardar(org.name + ' → ' + raizDest.name, { origem: org, destino: raizDest, pular, ultimo: new Date().toLocaleString('pt-BR') });
+    pintarPares();
+    return { ok, falha };
+  }
+
+  async function olhar() {
+    $('#b-olhar').disabled = true; $('#previa').innerHTML = '<p class="m">Olhando… (pasta grande pode levar um minuto)</p>';
+    try {
+      if (!(await permissao(origem, 'read')) || !(await permissao(destino, 'readwrite'))) throw new Error('Sem permissão para as pastas.');
+      if (await mesmaPasta()) throw new Error('A pasta do HD não pode ser a mesma (nem estar dentro) da pasta que vai ser copiada.');
+      const { lista, fazer } = await calcular(origem, destino, $('#pular').checked, (n) => { $('#previa').innerHTML = '<p class="m">Olhando… ' + n.toLocaleString('pt-BR') + ' arquivos</p>'; });
+      const t = fazer.reduce((s, a) => s + a.tam, 0);
+      $('#previa').innerHTML = fazer.length
+        ? '<p>Na pasta: <b>' + lista.length.toLocaleString('pt-BR') + '</b> arquivos.<br><span class="big">' + fazer.length.toLocaleString('pt-BR') + ' para copiar (' + humano(t) + ')</span></p><button class="bt v grande" id="b-copiar">💾 Copiar para o HD</button>'
+        : '<p class="big">Tudo já está no HD ✅</p><p class="m">Nada novo desde o último backup.</p>';
+      const b = $('#b-copiar'); if (b) b.onclick = () => { b.disabled = true; executar(origem, destino, $('#pular').checked).catch((e) => { alert('Erro: ' + e.message); log('❌ ' + e.message); }); };
+    } catch (e) { $('#previa').innerHTML = '<div class="perigo">' + e.message + '</div>'; }
+    $('#b-olhar').disabled = false;
+  }
+  async function mesmaPasta() {
+    try { if (await origem.isSameEntry(destino)) return true; const r = await origem.resolve(destino); return Array.isArray(r); } catch (e) { return false; }
+  }
+
+  async function pintarPares() {
+    const ps = await paresTodos(); const el = $('#pares');
+    if (!ps.length) return;
+    el.innerHTML = '<table>' + ps.map((p, i) => '<tr><td><b>' + p.id.replace(/</g, '&lt;') + '</b><br><span class="m">último: ' + (p.ultimo || '—') + '</span></td><td style="text-align:right;white-space:nowrap"><button class="bt v" data-rodar="' + i + '">▶ Fazer de novo</button> <button class="bt" data-tirar="' + i + '" title="Tirar da lista (não apaga arquivos)">✕</button></td></tr>').join('') + '</table>';
+    el.querySelectorAll('[data-rodar]').forEach((b) => b.onclick = async () => {
+      const p = ps[+b.dataset.rodar];
+      try {
+        if (!(await permissao(p.origem, 'read')) || !(await permissao(p.destino, 'readwrite'))) return alert('Sem permissão. Toque de novo e escolha "Permitir".');
+        origem = p.origem; destino = p.destino; $('#pular').checked = p.pular !== false; pintarEscolhas();
+        await executar(p.origem, p.destino, p.pular !== false);
+      } catch (e) { alert('Não achei a pasta. O HD está ligado?\n\n(' + e.message + ')'); }
+    });
+    el.querySelectorAll('[data-tirar]').forEach((b) => b.onclick = async () => { await parApagar(ps[+b.dataset.tirar].id); pintarPares(); location.reload(); });
+  }
+
+  // ── ligar botões ──
+  if (!('showDirectoryPicker' in window)) { $('#semsuporte').hidden = false; document.querySelectorAll('button').forEach((b) => b.disabled = true); }
+  $('#b-origem').onclick = () => escolher('origem');
+  $('#b-destino').onclick = () => escolher('destino');
+  $('#b-olhar').onclick = olhar;
+  $('#b-parar').onclick = () => { parar = true; $('#b-parar').disabled = true; };
+  $('#b-log').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([linhas.join('\r\n')], { type: 'text/plain;charset=utf-8' })); a.download = 'relatorio-backup.txt'; a.click(); };
+  window.addEventListener('beforeunload', (e) => { if (!$('#b-parar').disabled && !$('#cx-copia').hidden) { e.preventDefault(); e.returnValue = ''; } });
+  pintarPares();
+  // para testes automáticos
+  window.__backup = { calcular, executar, lerRegistro };
+})();
+</script>
+</body>
+</html>

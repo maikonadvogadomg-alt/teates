@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17312a">
+<title>Celular e PC Livres</title>
+<style>
+:root { --bg:#f3f1ec; --papel:#fff; --fg:#1d2320; --mut:#5c6661; --linha:#dcd8cf; --verde:#1f6b4f; --verde-claro:#e4f1ea; --amarelo:#fff4d6; --borda-am:#d9a400; --vermelho:#a3332a; --verm-claro:#fbe7e4; --cod:#eef0ee; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#121614; --papel:#1b211e; --fg:#e7ece9; --mut:#9fada6; --linha:#2d3632; --verde:#6fd1a4; --verde-claro:#1d3329; --amarelo:#33290f; --borda-am:#c99a1a; --vermelho:#f0958c; --verm-claro:#3a1f1c; --cod:#252c29; color-scheme:dark; } }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font:18px/1.6 system-ui,"Segoe UI",Roboto,sans-serif; }
+header { background:#17312a; color:#fff; padding:14px 16px; position:sticky; top:0; z-index:5; }
+header b { font-size:19px; } header small { display:block; color:#b9d3c7; font-size:13px; }
+nav { display:flex; gap:6px; overflow-x:auto; padding:8px 12px; background:var(--papel); border-bottom:1px solid var(--linha); position:sticky; top:62px; z-index:4; }
+nav button { flex:none; border:1px solid var(--linha); background:var(--bg); color:var(--fg); border-radius:999px; padding:8px 14px; font:inherit; font-size:15px; cursor:pointer; }
+nav button.ativa { background:var(--verde); border-color:var(--verde); color:#fff; }
+main { max-width:860px; margin:0 auto; padding:12px 16px 80px; }
+section.pg { display:none; } section.pg.ativa { display:block; }
+h1 { font-size:24px; line-height:1.3; margin:10px 0; } h2 { font-size:21px; margin:22px 0 8px; } h3 { font-size:18px; margin:16px 0 6px; }
+.cartao { background:var(--papel); border:1px solid var(--linha); border-radius:14px; padding:14px 16px; margin:12px 0; }
+.passo { display:grid; grid-template-columns:auto 1fr; gap:10px; background:var(--papel); border:1px solid var(--linha); border-radius:14px; padding:12px 14px; margin:10px 0; }
+.passo input[type=checkbox] { width:26px; height:26px; margin-top:3px; accent-color:var(--verde); }
+.passo.feito { opacity:.6; } .passo.feito b:first-child { text-decoration:line-through; }
+.dica, .cuidado, .perigo { border-radius:12px; padding:10px 14px; margin:10px 0; font-size:16px; border-left:5px solid; }
+.dica { background:var(--verde-claro); border-color:var(--verde); }
+.cuidado { background:var(--amarelo); border-color:var(--borda-am); }
+.perigo { background:var(--verm-claro); border-color:var(--vermelho); }
+code { font:15px ui-monospace,Consolas,monospace; background:var(--cod); padding:1px 6px; border-radius:5px; overflow-wrap:anywhere; }
+.cmd { display:flex; gap:8px; align-items:flex-start; background:#14201b; color:#d8f5e6; border-radius:10px; padding:10px 12px; margin:8px 0; font:15px/1.5 ui-monospace,Consolas,monospace; }
+.cmd span { flex:1; min-width:0; white-space:pre-wrap; overflow-wrap:anywhere; }
+.cmd button { flex:none; border:0; border-radius:8px; padding:6px 10px; background:#2e7d5b; color:#fff; font:14px system-ui; cursor:pointer; }
+.nivel { display:inline-block; font-size:13px; font-weight:700; padding:2px 10px; border-radius:999px; margin-right:6px; }
+.n1 { background:#d3f0de; color:#14532d; } .n2 { background:#fde9b8; color:#6b4b00; } .n3 { background:#f8d0cb; color:#7a1d14; }
+table { border-collapse:collapse; width:100%; font-size:16px; }
+td, th { border-bottom:1px solid var(--linha); padding:8px 6px; text-align:left; vertical-align:top; }
+th { background:var(--verde-claro); }
+.ingles { font-family:ui-monospace,Consolas,monospace; font-size:14px; }
+.busca { width:100%; padding:10px 12px; font:inherit; border:1px solid var(--linha); border-radius:10px; background:var(--papel); color:var(--fg); }
+.rodape { display:flex; justify-content:space-between; gap:8px; margin-top:24px; }
+.bt { border:1px solid var(--linha); background:var(--papel); color:var(--fg); border-radius:10px; padding:10px 16px; font:inherit; font-size:16px; cursor:pointer; }
+.bt.forte { background:var(--verde); border-color:var(--verde); color:#fff; }
+ul, ol { padding-left:22px; } li { margin:4px 0; }
+.mut { color:var(--mut); font-size:15px; }
+a { color:var(--verde); }
+</style>
+</head>
+<body>
+<header><b>🔓 Celular e PC livres</b><small>Guia do Maikon · passo a passo · funciona sem internet</small></header>
+<nav id="abas">
+  <button data-p="entender" class="ativa">1 · Entender</button>
+  <button data-p="liberar">2 · Liberar o bichinho</button>
+  <button data-p="reserva">3 · Celular reserva livre</button>
+  <button data-p="pc">4 · Computador livre</button>
+  <button data-p="ingles">5 · Tradutor das mensagens</button>
+  <button data-p="cuidados">6 · Cuidados</button>
+</nav>
+<main>
+
+<!-- ============ 1 ENTENDER ============ -->
+<section class="pg ativa" id="entender">
+<h1>O que aconteceu com o seu celular</h1>
+<div class="cartao">
+<p>Você <b>não fez nada de errado</b> e o seu bichinho <b>não está quebrado</b>.</p>
+<p>No dia <b>30 de setembro de 2026</b>, o Google ligou uma regra nova. O <b>Brasil foi um dos 4 primeiros países</b> (junto com Indonésia, Singapura e Tailândia). O resto do mundo só recebe em 2027.</p>
+<p>A regra: o celular com Google passa a <b>desconfiar de todo aplicativo cujo autor não mandou documento para o Google</b> (o Google chama isso de "desenvolvedor não verificado"). Os aplicativos que <b>nós</b> fazemos (Mini SK, jurídico, o terminal) se encaixam nisso, porque não pagamos nem cadastramos nada no Google.</p>
+<p>Além disso, desde 2024 o <b>Play Protect</b> (o "vigia" do Google) já barra aqui no Brasil o app baixado fora da loja quando ele pede permissões fortes (ler notificações, acessibilidade, SMS).</p>
+</div>
+<div class="dica">✅ <b>A boa notícia:</b> a lei do Google ainda deixa você instalar o que quiser. Só ficou mais chato: tem um caminho escondido com espera de 24 horas, e um caminho rápido pelo computador (cabo USB). Os dois estão na aba <b>2 · Liberar</b>.</div>
+
+<h2>Os 3 caminhos que você tem</h2>
+<div class="cartao"><span class="nivel n1">FÁCIL</span><b>Liberar no celular que você já tem.</b> Você continua com Google, mas o bichinho volta a instalar. Leva 10 minutos, mais 24 horas de espera. <i>→ aba 2</i></div>
+<div class="cartao"><span class="nivel n2">MÉDIO</span><b>Transformar o celular reserva num celular "quase sem Google".</b> Você reseta, não coloca conta Google, desliga o vigia e usa uma loja livre (F-Droid). Sem risco de estragar. <i>→ aba 3, Nível 1 e 2</i></div>
+<div class="cartao"><span class="nivel n3">DIFÍCIL</span><b>Trocar o sistema inteiro do celular</b> por um sem Google (LineageOS, /e/OS). É o "sem lei" de verdade, mas <b>só funciona em alguns modelos</b>, precisa do computador e pode estragar o aparelho se der errado. <i>→ aba 3, Nível 3</i></div>
+
+<h2>Minha recomendação honesta</h2>
+<div class="cartao">
+<ol>
+<li><b>No seu celular principal, deixe o Google.</b> Banco, gov.br, WhatsApp do escritório, Meu INSS e tribunal funcionam melhor com ele. Muitos aplicativos de banco <b>se recusam a abrir</b> em celular modificado.</li>
+<li><b>Faça só a liberação (aba 2) no principal</b>, para os seus bichinhos voltarem.</li>
+<li><b>O celular reserva vira o seu "laboratório livre"</b> (aba 3): Termux, Mini SK, os seus apps, sem vigia.</li>
+<li><b>No computador:</b> pode trocar o Windows pelo <b>Linux Mint</b> (aba 4). É grátis, em português e sem Microsoft vigiando. O Windows 10 já parou de receber atualização em outubro de 2025.</li>
+</ol>
+</div>
+</section>
+
+<!-- ============ 2 LIBERAR ============ -->
+<section class="pg" id="liberar">
+<h1>Liberar o bichinho (no celular que você já tem)</h1>
+<p class="mut">Faça na ordem. Marque ✓ cada passo pronto: o guia lembra onde você parou.</p>
+
+<h2>Parte A — Desligar o vigia (Play Protect)</h2>
+<div class="passo"><input type="checkbox" data-k="a1"><div><b>Abra a Play Store</b> (a lojinha colorida do Google).</div></div>
+<div class="passo"><input type="checkbox" data-k="a2"><div><b>Toque na sua foto</b>, no canto de cima à direita.</div></div>
+<div class="passo"><input type="checkbox" data-k="a3"><div><b>Toque em "Play Protect".</b></div></div>
+<div class="passo"><input type="checkbox" data-k="a4"><div><b>Toque na engrenagem ⚙️</b>, em cima à direita.</div></div>
+<div class="passo"><input type="checkbox" data-k="a5"><div><b>Desligue "Verificar apps com o Play Protect"</b>. Se aparecer em inglês, é <span class="ingles">"Scan apps with Play Protect"</span>. Confirme com <b>Desativar</b> (ou <span class="ingles">Turn off</span>).</div></div>
+<div class="cuidado">⚠️ Com isso desligado, <b>você</b> passa a ser o vigia. Só instale APK que <b>você</b> fez ou de site confiável. Nunca instale APK que alguém mandou por WhatsApp.</div>
+
+<h2>Parte B — Ligar as "Opções do desenvolvedor"</h2>
+<div class="passo"><input type="checkbox" data-k="b1"><div><b>Abra Configurações</b> → <b>Sobre o telefone</b>.<br><span class="mut">Samsung: Sobre o telefone → <b>Informações do software</b>. Xiaomi: Sobre o telefone.</span></div></div>
+<div class="passo"><input type="checkbox" data-k="b2"><div><b>Toque 7 vezes seguidas em "Número da versão"</b> (Xiaomi: em "Versão do HyperOS/MIUI"). Ele pede o PIN e depois diz <b>"Você agora é um desenvolvedor"</b>.</div></div>
+<div class="passo"><input type="checkbox" data-k="b3"><div>Agora existe <b>Configurações → Sistema → Opções do desenvolvedor</b>.<br><span class="mut">Samsung: aparece no fim da lista de Configurações. Xiaomi: Configurações adicionais.</span></div></div>
+
+<h2>Parte C — O caminho do Google (espera de 24 horas)</h2>
+<div class="passo"><input type="checkbox" data-k="c1"><div><b>Dentro de Opções do desenvolvedor</b>, procure <b>"Apps de desenvolvedores não verificados"</b>. Pode aparecer em inglês: <span class="ingles">"Apps from unverified developers"</span> ou <span class="ingles">"Allow unverified apps"</span>. Ligue.</div></div>
+<div class="passo"><input type="checkbox" data-k="c2"><div>Ele pergunta se <b>alguém está te pressionando</b> (é contra golpista). Responda que <b>não</b> e confirme.</div></div>
+<div class="passo"><input type="checkbox" data-k="c3"><div><b>Reinicie o celular.</b></div></div>
+<div class="passo"><input type="checkbox" data-k="c4"><div><b>Espere 24 horas.</b> É só uma vez em cada celular. Anote o horário:<br><input type="text" class="busca" data-k="c4hora" placeholder="ex.: liguei sexta às 15h"></div></div>
+<div class="passo"><input type="checkbox" data-k="c5"><div><b>Depois das 24h, volte no mesmo lugar</b> (Opções do desenvolvedor). Confirme com a digital ou o PIN e escolha <b>"Permitir sempre"</b> (em inglês: <span class="ingles">Allow indefinitely</span>). A outra opção, <span class="ingles">Allow temporarily</span>, só vale 7 dias.<br><span class="mut">Dica de quem já fez: não deixe passar muitos dias depois das 24h, senão ele pode pedir a espera de novo.</span></div></div>
+<div class="passo"><input type="checkbox" data-k="c6"><div><b>Instale o bichinho.</b> Quando aparecer o aviso, toque em <b>"Instalar mesmo assim"</b> (<span class="ingles">Install anyway</span>). Às vezes fica escondido em <b>"Mais detalhes"</b> (<span class="ingles">More details</span>).</div></div>
+<div class="dica">✅ Depois disso, pode até desligar as Opções do desenvolvedor: a liberação continua valendo.</div>
+<div class="cuidado">ℹ️ O Google está ligando isso <b>aos poucos</b>. Se essa opção <b>ainda não aparece</b> no seu celular, ótimo: a regra ainda não chegou nele, e as Partes A e B já resolvem. Se o app ainda for barrado, use a Parte D.</div>
+
+<h2>Parte D — O caminho rápido pelo computador (sem esperar)</h2>
+<p>O próprio Google deixa instalar <b>pelo cabo USB</b>, com um programa chamado <b>ADB</b>, sem espera nenhuma. Aqui o computador "empurra" o app para dentro do celular.</p>
+<div class="passo"><input type="checkbox" data-k="d1"><div><b>No celular:</b> Opções do desenvolvedor → ligue <b>"Depuração USB"</b> (<span class="ingles">USB debugging</span>).</div></div>
+<div class="passo"><input type="checkbox" data-k="d2"><div><b>No computador com Windows:</b> baixe o <b>"SDK Platform-Tools"</b> no site oficial <code>developer.android.com/tools/releases/platform-tools</code>. Ele vem num .zip: <b>extraia numa pasta fácil</b>, por exemplo <code>C:\adb</code>.<br><b>No computador com Linux Mint:</b> abra o Terminal e cole:
+<div class="cmd"><span>sudo apt install adb</span><button>Copiar</button></div></div></div>
+<div class="passo"><input type="checkbox" data-k="d3"><div><b>Ligue o cabo</b> do celular no computador. No celular aparece <b>"Permitir depuração USB?"</b>: marque "Sempre permitir deste computador" e toque em <b>Permitir</b>.</div></div>
+<div class="passo"><input type="checkbox" data-k="d4"><div><b>No computador, abra o terminal</b> dentro da pasta do adb. No Windows: abra a pasta <code>C:\adb</code>, clique na barra de endereço, apague, digite <code>cmd</code> e aperte Enter. Teste:
+<div class="cmd"><span>adb devices</span><button>Copiar</button></div>
+Tem que aparecer um código e a palavra <b>device</b>. Se aparecer <b>unauthorized</b>, olhe a tela do celular e toque em Permitir.</div></div>
+<div class="passo"><input type="checkbox" data-k="d5"><div><b>Coloque o APK na mesma pasta</b> (ex.: <code>C:\adb\minisk.apk</code>) e mande instalar:
+<div class="cmd"><span>adb install minisk.apk</span><button>Copiar</button></div>
+Apareceu <b>Success</b> = instalado. ✅</div></div>
+<div class="dica">💡 Para <b>atualizar</b> um app que já está no celular, use: <code>adb install -r nome.apk</code> (o <b>-r</b> quer dizer "substituir").</div>
+
+<h2>Por que a ponte do Termux não conectava</h2>
+<div class="cartao">
+<p>Há dois motivos comuns:</p>
+<ol>
+<li><b>Termux da Play Store</b> é uma versão diferente, mais limitada. O certo é o Termux do <b>F-Droid</b> (aba 3, passo 1-6) ou do GitHub oficial (<code>github.com/termux/termux-app/releases</code>). Não misture: se tiver o da Play, desinstale antes de pôr o outro.</li>
+<li>O Android <b>"mata" o Termux em segundo plano</b> para economizar bateria. No Termux, puxe a barra de notificação e toque em <b>"Acquire wakelock"</b>. Em Configurações → Apps → Termux → Bateria, escolha <b>"Sem restrições"</b>.</li>
+</ol>
+</div>
+</section>
+
+<!-- ============ 3 RESERVA ============ -->
+<section class="pg" id="reserva">
+<h1>Celular reserva: o seu celular livre</h1>
+<div class="perigo">🛑 <b>Antes de tudo:</b> confira se não ficou <b>nada seu</b> no celular reserva (fotos, conversas, documentos de cliente). O passo 1 <b>apaga tudo</b> dele.</div>
+
+<h2><span class="nivel n1">NÍVEL 1</span> Sem conta Google, sem computador, sem risco</h2>
+<div class="passo"><input type="checkbox" data-k="r1"><div><b>Resetar o celular reserva:</b> Configurações → Sistema → <b>Redefinir</b> → <b>Apagar todos os dados (restaurar padrão de fábrica)</b>.</div></div>
+<div class="passo"><input type="checkbox" data-k="r2"><div>Quando ligar de novo e pedir <b>conta Google</b>, toque em <b>"Pular"</b> (<span class="ingles">Skip</span>). Pule também Samsung/Xiaomi conta, backup e "serviços do Google". <b>Desmarque</b> tudo o que for "enviar dados", localização e "melhorar".<br><span class="mut">Às vezes o "Pular" fica escondido em "Mais opções" ou ⋮. Se o celular <b>exigir</b> conta para continuar, desligue o Wi-Fi e tente de novo.</span></div></div>
+<div class="passo"><input type="checkbox" data-k="r3"><div><b>Desative os apps do Google que der:</b> Configurações → Apps → toque no app (YouTube, Chrome, Gmail, Google, Drive, Meet, Fotos, Assistente…) → <b>Desativar</b>. Alguns não deixam: tudo bem, o Nível 2 resolve.</div></div>
+<div class="passo"><input type="checkbox" data-k="r4"><div><b>Faça a aba 2</b>, Partes A, B e C (ou D), neste celular também. Sem conta Google, a Play Store nem abre, mas o Play Protect fica ligado por baixo. Por isso use a Parte C ou D.</div></div>
+<div class="passo"><input type="checkbox" data-k="r5"><div><b>Instale a loja livre F-Droid:</b> no navegador, abra <code>f-droid.org</code> → botão <b>"Baixar F-Droid"</b> → abra o arquivo → permita "instalar apps desta fonte". É uma loja só de aplicativos <b>grátis, de código aberto, sem propaganda e sem rastreio</b>.</div></div>
+<div class="passo"><input type="checkbox" data-k="r6"><div><b>Pelo F-Droid, instale</b> (toque na lupa 🔍 e digite o nome):
+<table>
+<tr><th>Nome</th><th>Para quê</th></tr>
+<tr><td><b>Termux</b></td><td>O terminal (o certo, para a ponte do Mini SK)</td></tr>
+<tr><td><b>Fennec</b></td><td>Navegador (é o Firefox sem rastreio). Substitui o Chrome</td></tr>
+<tr><td><b>Aurora Store</b></td><td>Baixar apps da Play Store <b>sem conta Google</b> (entre como "Anônimo")</td></tr>
+<tr><td><b>Fossify File Manager</b></td><td>Gerenciador de arquivos</td></tr>
+<tr><td><b>Fossify Gallery</b></td><td>Fotos</td></tr>
+<tr><td><b>Organic Maps</b></td><td>Mapa e GPS que funciona sem internet</td></tr>
+<tr><td><b>NewPipe</b></td><td>YouTube sem propaganda e sem conta</td></tr>
+</table></div></div>
+<div class="passo"><input type="checkbox" data-k="r7"><div><b>Teclado com ditado por voz sem Google</b> (importante para a sua mão): o <b>Teclado FUTO</b> tem ditado que funciona <b>sem internet</b>, dentro do próprio celular. Baixe pelo site <code>keyboard.futo.org</code> e depois ative em Configurações → Sistema → Teclado.</div></div>
+<div class="dica">✅ Pronto o Nível 1: você tem um celular sem conta Google, com o seu terminal, os seus apps e um navegador sem vigia. Para a maioria das coisas, já basta.</div>
+
+<h2><span class="nivel n2">NÍVEL 2</span> Desligar o Google por dentro (precisa do computador, sem risco grande)</h2>
+<p>Alguns apps do Google não deixam desativar pelo celular. Pelo computador, com o <b>ADB</b> (aba 2, Parte D), dá. <b>Desativar não apaga</b>: dá para ligar de volta se algo parar de funcionar.</p>
+<div class="passo"><input type="checkbox" data-k="n1"><div><b>Jeito fácil (com botões):</b> no computador, baixe o <b>"Universal Android Debloater Next Generation"</b> (procure por esse nome no GitHub, na parte "Releases"). Ligue o celular no cabo, abra o programa e ele mostra a lista de apps com <b>cores</b>: <b>"Recommended"</b> (pode tirar sem medo), <b>"Advanced"</b> (com cuidado), <b>"Expert"</b> e <b>"Unsafe"</b> (não mexa).<br><span class="mut">Em celular com Android 17, use sempre o botão <b>"Disable"</b> (desativar), não "Uninstall".</span></div></div>
+<div class="passo"><input type="checkbox" data-k="n2"><div><b>Jeito com comando</b> (um app por vez). Ver a lista dos apps do Google:
+<div class="cmd"><span>adb shell pm list packages google</span><button>Copiar</button></div>
+Desativar um (exemplo: YouTube):
+<div class="cmd"><span>adb shell pm disable-user --user 0 com.google.android.youtube</span><button>Copiar</button></div>
+Se der problema, <b>ligar de volta</b>:
+<div class="cmd"><span>adb shell pm enable com.google.android.youtube</span><button>Copiar</button></div></div></div>
+<div class="cuidado">⚠️ <b>Não desative</b>: Configurações, o "launcher" (a tela inicial), o teclado que você usa, o telefone/discador e "Android System WebView" (sem ele vários apps abrem em branco).<br>Os <b>"Serviços do Google Play"</b> (<code>com.google.android.gms</code>) são o coração do vigia. Ao desligar, o celular fica bem mais livre, mas o <b>WhatsApp atrasa as notificações</b> e apps de banco param. Por isso: no <b>reserva</b>, pode; no <b>principal</b>, não.</div>
+
+<h2><span class="nivel n3">NÍVEL 3</span> Trocar o sistema inteiro (o "sem lei" de verdade)</h2>
+<div class="perigo">🛑 Leia tudo antes. Se der errado no meio, o celular pode <b>não ligar mais</b> (os técnicos chamam isso de "brickar"). Só faça no reserva, nunca no principal.</div>
+<div class="cartao">
+<p><b>O que é:</b> você apaga o Android do fabricante e coloca um Android <b>limpo, sem Google</b>. Os mais conhecidos:</p>
+<ul>
+<li><b>/e/OS</b> (site <code>e.foundation</code>): o mais fácil. Já vem com loja própria e apps prontos, e tem instalador que guia.</li>
+<li><b>LineageOS</b> (site <code>lineageos.org</code>): o mais famoso, e aceita a maior lista de celulares.</li>
+<li><b>GrapheneOS</b>: o mais seguro, mas <b>só funciona em celular Google Pixel</b> (ironia: o melhor celular para fugir do Google é o do Google).</li>
+</ul>
+<p><b>O problema:</b> só funciona se <b>o seu modelo exato</b> estiver na lista, e se o fabricante deixar "destravar" o celular (o nome disso é <i>bootloader</i>):</p>
+<ul>
+<li><b>Samsung:</b> desde o One UI 8 (2025) <b>não deixa mais</b> destravar. Quase impossível.</li>
+<li><b>Xiaomi/Redmi/Poco:</b> ficou muito difícil desde 2024 (exige conta antiga, espera e regras chinesas).</li>
+<li><b>Motorola:</b> muitos modelos deixam, pelo site da Motorola.</li>
+<li><b>Celular "do Paraguai"</b> (Tecno, Infinix, Blu, marcas sem nome): quase nunca estão na lista. <b>Na prática, não dá.</b></li>
+<li><b>Google Pixel usado</b> (ex.: Pixel 6a, 7a, 8a): o mais fácil de todos. Se um dia você for comprar um celular para isso, compre um Pixel usado.</li>
+</ul>
+</div>
+<div class="passo"><input type="checkbox" data-k="t1"><div><b>Descubra o modelo exato:</b> Configurações → Sobre o telefone → <b>Modelo</b>. Anote:<br><input type="text" class="busca" data-k="t1modelo" placeholder="ex.: moto g54 (XT2343-1)"></div></div>
+<div class="passo"><input type="checkbox" data-k="t2"><div><b>Procure o modelo</b> nas listas: <code>doc.e.foundation/devices</code> e <code>wiki.lineageos.org/devices</code>. <b>Não está lá? Pare aqui</b>, e o Nível 1 + 2 é o máximo para esse aparelho. Está? Me mande o modelo que eu faço o passo a passo <b>só para ele</b>, porque cada modelo é diferente.</div></div>
+</section>
+
+<!-- ============ 4 PC ============ -->
+<section class="pg" id="pc">
+<h1>Computador livre: Linux Mint</h1>
+<div class="cartao">
+<p>O <b>Linux Mint</b> é um sistema no lugar do Windows: <b>grátis, em português, sem conta Microsoft, sem propaganda</b>, e roda bem em computador mais velho. Visualmente parece com o Windows: menu no canto, barra embaixo.</p>
+<p><b>O que funciona nele:</b> Firefox e Chrome, WhatsApp Web, LibreOffice (abre e salva Word), o <b>Ollama</b> (melhor que no Windows), o Mini SK pelo navegador, e um terminal de verdade (o Linux nasceu para terminal). O <b>PJeOffice Pro tem versão para Linux</b>.</p>
+<p><b>O que pode dar trabalho:</b> o <b>token do certificado digital A3</b> (precisa instalar o programa do fabricante do token, para Linux), algumas impressoras e programas só de Windows. Os .exe que fizemos (Mini SK PC, jurídico) <b>são de Windows</b>: no Linux você usa a versão no navegador.</p>
+</div>
+<div class="dica">✅ <b>Sem medo:</b> dá para <b>testar o Linux pelo pendrive sem instalar nada</b> (passo 6). E dá para instalar <b>ao lado do Windows</b>: ao ligar o PC, você escolhe qual usar. Não precisa apagar o Windows.</div>
+<div class="perigo">🛑 <b>Os seus arquivos de cliente:</b> antes do passo 7, confirme que <b>tudo</b> está no Google Drive (<code>drive.google.com</code> → "Computadores" e também a Lixeira) <b>ou</b> num HD externo. Se estiver em dúvida, me chame <b>antes</b> de instalar.</div>
+
+<div class="passo"><input type="checkbox" data-k="p1"><div><b>Separe um pendrive de 8 GB ou mais.</b> Ele vai ser <b>apagado</b>, então tire o que tiver nele.</div></div>
+<div class="passo"><input type="checkbox" data-k="p2"><div><b>Baixe o Linux Mint:</b> site <code>linuxmint.com</code> → <b>Download</b> → escolha <b>"Cinnamon Edition"</b> (a mais parecida com Windows) → escolha um link do <b>Brasil</b>. É um arquivo grande (cerca de 3 GB), terminado em <b>.iso</b>.</div></div>
+<div class="passo"><input type="checkbox" data-k="p3"><div><b>Baixe o "Balena Etcher"</b> (site <code>etcher.balena.io</code>). É o programa que grava o Linux no pendrive com 3 botões.</div></div>
+<div class="passo"><input type="checkbox" data-k="p4"><div><b>Grave:</b> abra o Etcher → <b>Flash from file</b> (escolha o .iso) → <b>Select target</b> (escolha o pendrive, com cuidado para não escolher o HD!) → <b>Flash!</b>. Espere terminar.</div></div>
+<div class="passo"><input type="checkbox" data-k="p5"><div><b>Ligue o PC pelo pendrive:</b> com o pendrive espetado, reinicie e <b>fique apertando a tecla do menu de boot</b> logo que ligar:
+<table><tr><th>Marca</th><th>Tecla</th></tr>
+<tr><td>Dell</td><td>F12</td></tr><tr><td>Lenovo</td><td>F12 (ou o botãozinho "Novo")</td></tr><tr><td>HP</td><td>F9 (ou Esc e depois F9)</td></tr><tr><td>Acer</td><td>F12</td></tr><tr><td>Asus</td><td>F8 ou Esc</td></tr><tr><td>Positivo / Multilaser</td><td>F7 ou F12</td></tr><tr><td>Samsung</td><td>F2 / F10</td></tr></table>
+Escolha o pendrive (às vezes chamado de <span class="ingles">USB</span> ou pelo nome da marca do pendrive).</div></div>
+<div class="passo"><input type="checkbox" data-k="p6"><div><b>Teste sem instalar:</b> escolha <span class="ingles">"Start Linux Mint"</span>. Ele abre o Linux <b>direto do pendrive</b>, sem mexer no seu PC. Teste: Wi-Fi, som, tela, impressora. <b>Gostou e tudo funcionou?</b> Continue. <b>Não gostou?</b> É só desligar, tirar o pendrive, e o Windows volta como era.</div></div>
+<div class="passo"><input type="checkbox" data-k="p7"><div><b>Instalar:</b> na área de trabalho do teste, abra <b>"Install Linux Mint"</b>. Escolha <b>Português do Brasil</b>, teclado <b>Portuguese (Brazil) ABNT2</b>, marque "instalar codecs multimídia" e, na pergunta do disco, escolha <b>"Instalar o Linux Mint ao lado do Windows"</b>.<br><b>Nunca escolha "Apagar disco"</b> se você ainda quer o Windows ou os arquivos dele.</div></div>
+<div class="passo"><input type="checkbox" data-k="p8"><div><b>Depois de instalado,</b> abra o <b>Gerenciador de Atualizações</b> e atualize tudo. Instale o que precisa pelo <b>Gerenciador de Aplicativos</b> (é a loja do Mint; procure "Chrome", "LibreOffice", "VS Code"…).</div></div>
+<div class="passo"><input type="checkbox" data-k="p9"><div><b>Instale o Ollama</b> (a IA no seu PC): abra o <b>Terminal</b> (menu → Terminal) e cole:
+<div class="cmd"><span>curl -fsSL https://ollama.com/install.sh | sh</span><button>Copiar</button></div>
+Depois baixe um modelo que fala português:
+<div class="cmd"><span>ollama pull qwen2.5:3b</span><button>Copiar</button></div>
+No Linux ele <b>já fica ligado sozinho</b>: não precisa de <code>ollama serve</code> nem de janela aberta.</div></div>
+<div class="passo"><input type="checkbox" data-k="p10"><div><b>Colar no terminal do Linux:</b> é <b>Ctrl + Shift + V</b> (com Shift!). Copiar é <b>Ctrl + Shift + C</b>. O Ctrl+C sozinho <b>para</b> o que está rodando.</div></div>
+
+<h2>Se preferir ficar no Windows, mas com menos Microsoft</h2>
+<div class="cartao"><ul>
+<li>Use <b>conta local</b> em vez de conta Microsoft: Configurações → Contas → "Entrar com uma conta local".</li>
+<li>Desligue o <b>OneDrive</b> de iniciar sozinho (botão direito no ícone da nuvem → Configurações → desmarcar "Iniciar automaticamente"). <b>Cuidado:</b> antes, confira que os arquivos dele estão também no seu computador.</li>
+<li>Configurações → Privacidade e segurança: desligue tudo o que for "diagnóstico", "anúncios", "experiências personalizadas".</li>
+<li>Use o Firefox no lugar do Edge.</li>
+</ul></div>
+</section>
+
+<!-- ============ 5 INGLES ============ -->
+<section class="pg" id="ingles">
+<h1>Tradutor das mensagens em inglês</h1>
+<p class="mut">Apareceu uma mensagem em inglês? Digite uma palavra dela aqui:</p>
+<input type="search" class="busca" id="busca-ingles" placeholder="ex.: blocked, unverified, allow…">
+<table id="tab-ingles" style="margin-top:10px">
+<tr><th>O que aparece</th><th>Quer dizer</th><th>O que tocar</th></tr>
+</table>
+</section>
+
+<!-- ============ 6 CUIDADOS ============ -->
+<section class="pg" id="cuidados">
+<h1>Cuidados (para não perder nada)</h1>
+<div class="perigo">🛑 <b>Arquivos de clientes:</b> nada de formatar, resetar ou instalar sistema enquanto não tiver certeza de onde estão. Eles foram para o Google Drive: confira em <code>drive.google.com</code> → <b>"Computadores"</b> e na <b>Lixeira</b>.</div>
+<div class="cartao"><ul>
+<li><b>Um passo por dia.</b> Não precisa fazer tudo hoje. O guia lembra os passos que você marcou ✓.</li>
+<li><b>Celular principal:</b> só a aba 2 (liberar). Banco, gov.br, Meu INSS e WhatsApp do escritório ficam nele, com Google.</li>
+<li><b>Celular reserva:</b> é o laboratório. Pode errar nele à vontade.</li>
+<li><b>Nunca instale APK</b> que chegou por mensagem, mesmo de conhecido. Golpista usa exatamente isso.</li>
+<li><b>Senhas, chaves e tokens</b> (do Gemini, GitHub, banco): nunca mande por foto ou mensagem para ninguém, nem para mim.</li>
+<li><b>Travou num passo?</b> Tire um print e me mande junto com o número do passo (ex.: "aba 3, passo r2").</li>
+</ul></div>
+<h2>Onde li estas informações</h2>
+<div class="cartao mut"><ul>
+<li>Android Authority: como passar pela nova regra de instalação do Android (setembro de 2026)</li>
+<li>9to5Google: Google liberando aos poucos o "caminho avançado" (agosto de 2026)</li>
+<li>Tecnoblog: Android dificulta instalação de APKs no Brasil; o caminho com espera de 24h</li>
+<li>Blog oficial Android Developers: verificação de desenvolvedores (março de 2026)</li>
+<li>SamMobile / Android Authority: Samsung One UI 8 acaba com o desbloqueio do bootloader (julho de 2025)</li>
+</ul></div>
+<div class="rodape"><button class="bt" id="zerar">🧽 Desmarcar todos os passos</button></div>
+</section>
+
+</main>
+<script>
+(function(){
+  'use strict';
+  var guardar = function(k,v){ try{ localStorage.setItem('guia-livre:'+k, JSON.stringify(v)); }catch(e){} };
+  var ler = function(k,d){ try{ var v=localStorage.getItem('guia-livre:'+k); return v==null?d:JSON.parse(v); }catch(e){ return d; } };
+
+  // a barra de abas gruda logo abaixo do título, qualquer que seja a altura dele
+  var cab=document.querySelector('header'); var ajTopo=function(){ document.getElementById('abas').style.top=cab.offsetHeight+'px'; }; ajTopo(); addEventListener('resize', ajTopo);
+  // abas
+  var abas = document.getElementById('abas');
+  function abrir(p){
+    Array.prototype.forEach.call(abas.children, function(b){ b.classList.toggle('ativa', b.dataset.p===p); if(b.dataset.p===p) b.scrollIntoView({inline:'center',block:'nearest'}); });
+    Array.prototype.forEach.call(document.querySelectorAll('section.pg'), function(s){ s.classList.toggle('ativa', s.id===p); });
+    guardar('aba', p); window.scrollTo(0,0);
+  }
+  abas.addEventListener('click', function(e){ var b=e.target.closest('button'); if(b) abrir(b.dataset.p); });
+  abrir(ler('aba','entender'));
+
+  // passos marcados e anotações
+  document.querySelectorAll('.passo input[type=checkbox]').forEach(function(c){
+    c.checked = !!ler('k:'+c.dataset.k, false);
+    c.closest('.passo').classList.toggle('feito', c.checked);
+    c.addEventListener('change', function(){ guardar('k:'+c.dataset.k, c.checked); c.closest('.passo').classList.toggle('feito', c.checked); });
+  });
+  document.querySelectorAll('input[type=text][data-k]').forEach(function(i){
+    i.value = ler('t:'+i.dataset.k, '');
+    i.addEventListener('input', function(){ guardar('t:'+i.dataset.k, i.value); });
+  });
+  document.getElementById('zerar').onclick = function(){
+    if(!confirm('Desmarcar todos os passos?')) return;
+    document.querySelectorAll('.passo input[type=checkbox]').forEach(function(c){ c.checked=false; guardar('k:'+c.dataset.k,false); c.closest('.passo').classList.remove('feito'); });
+  };
+
+  // copiar comandos
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('.cmd button'); if(!b) return;
+    var t = b.previousElementSibling.textContent;
+    var ok = function(){ b.textContent='Copiado ✓'; setTimeout(function(){ b.textContent='Copiar'; },1500); };
+    if(navigator.clipboard) navigator.clipboard.writeText(t).then(ok, function(){ prompt('Copie:', t); });
+    else prompt('Copie:', t);
+  });
+
+  // tradutor
+  var FRASES = [
+    ['App blocked to protect your device','App bloqueado para proteger seu aparelho','Mais detalhes → Instalar mesmo assim (ou aba 2)'],
+    ['Unverified developer / App from an unverified developer','Desenvolvedor não verificado (não mandou documento ao Google)','Aba 2, Parte C ou D'],
+    ['Apps from unverified developers','Apps de desenvolvedores não verificados (a chave nas Opções do desenvolvedor)','Ligar'],
+    ['Install anyway','Instalar mesmo assim','Tocar (se o app é seu)'],
+    ['More details','Mais detalhes','Tocar: muitas vezes esconde o "Instalar mesmo assim"'],
+    ['Allow temporarily','Permitir temporariamente (7 dias)','Melhor: Allow indefinitely'],
+    ['Allow indefinitely','Permitir sempre','Tocar'],
+    ['Restart now / Restart required','Reiniciar agora / precisa reiniciar','Tocar'],
+    ['Waiting period / Try again in 24 hours','Período de espera / tente de novo em 24 horas','Esperar um dia'],
+    ['Someone may be pressuring you','Alguém pode estar te pressionando (pergunta contra golpe)','Responder que não'],
+    ['Scan apps with Play Protect','Verificar apps com o Play Protect (o vigia)','Desligar (aba 2, Parte A)'],
+    ['Harmful app blocked','App perigoso bloqueado','Só libere se o app for seu'],
+    ['Unsafe app blocked','App inseguro bloqueado','Mais detalhes → Instalar mesmo assim'],
+    ['Install unknown apps','Instalar apps desconhecidos (permissão por app: navegador, arquivos)','Ligar "Permitir desta fonte"'],
+    ['Allow from this source','Permitir desta fonte','Ligar'],
+    ['Developer options','Opções do desenvolvedor','Aba 2, Parte B'],
+    ['You are now a developer!','Você agora é um desenvolvedor!','Pronto, deu certo'],
+    ['USB debugging','Depuração USB (para o computador mandar comandos)','Ligar (aba 2, Parte D)'],
+    ['Allow USB debugging? / Always allow from this computer','Permitir depuração USB? / Sempre permitir deste computador','Marcar e tocar em Permitir'],
+    ['Wireless debugging','Depuração sem fio (pelo Wi-Fi)','Usado pelo Shizuku; pode ignorar'],
+    ['unauthorized','não autorizado (no adb devices)','Olhe a tela do celular e toque em Permitir'],
+    ['Success','Sucesso (instalou)','Nada, deu certo ✅'],
+    ['INSTALL_FAILED_UPDATE_INCOMPATIBLE','A versão nova foi assinada diferente da antiga','Desinstale o antigo e instale de novo'],
+    ['INSTALL_FAILED_VERIFICATION_FAILURE','A verificação do Google barrou','Use adb install (Parte D) ou a Parte C'],
+    ['OEM unlocking','Desbloqueio de OEM (destravar o celular para trocar o sistema)','Só no Nível 3'],
+    ['Bootloader','A "porta de entrada" do sistema; destravar = poder trocar o Android','Só no Nível 3'],
+    ['Factory reset / Erase all data','Restaurar padrão de fábrica / apagar tudo','Só no celular reserva!'],
+    ['Skip','Pular','Tocar quando pedir conta Google'],
+    ['Sign in','Entrar (fazer login)','No reserva: pule'],
+    ['Disable / Uninstall','Desativar (dá para voltar) / Desinstalar','Prefira Desativar'],
+    ['Force stop','Forçar parada (fecha o app)','Pode tocar, não estraga nada'],
+    ['Battery optimization / Unrestricted','Otimização de bateria / Sem restrições','Termux: escolher Sem restrições'],
+    ['Acquire wakelock','Manter acordado (Termux não é "morto")','Tocar na notificação do Termux'],
+    ['Permission denied','Permissão negada','Faltou permitir algo ou usar sudo (Linux)'],
+    ['Command not found','Comando não encontrado (programa não instalado ou nome errado)','Confira a escrita; instale o programa'],
+    ['Start Linux Mint','Iniciar o Linux Mint (teste, sem instalar)','Tocar para testar'],
+    ['Install alongside Windows','Instalar ao lado do Windows','Escolher esta'],
+    ['Erase disk and install','Apagar o disco e instalar','NÃO, se ainda quiser o Windows/arquivos'],
+    ['Flash from file / Select target / Flash!','Escolher arquivo / escolher pendrive / gravar','Etcher, aba 4 passo 4'],
+    ['Secure Boot','Inicialização segura (proteção do PC)','O Mint funciona com ele ligado; se não iniciar, me chame'],
+  ];
+  var tab = document.getElementById('tab-ingles');
+  FRASES.forEach(function(f){ var tr=document.createElement('tr'); tr.innerHTML='<td class="ingles"></td><td></td><td></td>'; tr.children[0].textContent=f[0]; tr.children[1].textContent=f[1]; tr.children[2].textContent=f[2]; tab.appendChild(tr); });
+  var sem = function(s){ return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); };
+  document.getElementById('busca-ingles').addEventListener('input', function(e){
+    var q = sem(e.target.value.trim());
+    Array.prototype.forEach.call(tab.querySelectorAll('tr'), function(tr,i){ if(i===0) return; tr.style.display = !q || sem(tr.textContent).indexOf(q)>=0 ? '' : 'none'; });
+  });
+})();
+</script>
+</body>
+</html>
